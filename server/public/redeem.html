@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Souvenir Hunt Redeem</title>
+    <link rel="stylesheet" href="/staff/redeem.css" />
+  </head>
+  <body>
+    <main class="redeem-shell">
+      <section class="redeem-card">
+        <div class="eyebrow">Staff Redeem</div>
+        <h1>Souvenir Pickup</h1>
+        <p class="lede">Check the QR code status and confirm the pickup with your staff PIN.</p>
+
+        <div id="statusBox" class="status-box status-neutral">
+          <div class="status-label">Status</div>
+          <div id="statusText" class="status-text">Checking...</div>
+        </div>
+
+        <div class="details-grid">
+          <div class="detail">
+            <span class="detail-label">Pickup code</span>
+            <strong id="codeValue">-</strong>
+          </div>
+          <div class="detail">
+            <span class="detail-label">Message</span>
+            <strong id="messageValue">Waiting for validation</strong>
+          </div>
+        </div>
+
+        <div id="successPanel" class="success-panel" hidden>
+          <div class="success-title">Pickup Confirmed</div>
+          <p>The souvenir has been successfully handed over. This code is now locked.</p>
+        </div>
+
+        <form id="redeemForm" class="redeem-form">
+          <label for="staffPin">Staff PIN</label>
+          <input id="staffPin" name="staffPin" type="password" inputmode="numeric" placeholder="Enter staff PIN" />
+          <button id="confirmButton" type="submit">Confirm Pickup</button>
+        </form>
+
+        <p id="resultText" class="result-text"></p>
+      </section>
+    </main>
+
+    <script type="module" src="/staff/redeem.js"></script>
+  </body>
+</html>

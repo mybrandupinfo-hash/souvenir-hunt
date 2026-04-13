@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import QRCode from "qrcode";
 import {
   ArrowRight,
   Building2,
@@ -216,6 +217,23 @@ function formatTimeLeft(expiry) {
   const hours = Math.floor(diff / 3600000);
   const minutes = Math.floor((diff % 3600000) / 60000);
   return `${hours}h ${minutes}m left`;
+}
+
+async function createPickupAssets(pickupCode) {
+  const redeemUrl = `${window.location.origin}/redeem?code=${pickupCode}`;
+  const qrCodeDataUrl = await QRCode.toDataURL(redeemUrl, {
+    margin: 1,
+    width: 240,
+    color: {
+      dark: "#0f172a",
+      light: "#ffffff",
+    },
+  });
+
+  return {
+    redeemUrl,
+    qrCodeDataUrl,
+  };
 }
 
 function Logo() {
@@ -490,6 +508,38 @@ export default function SouvenirHuntWebsite() {
     }
   }, [isPurchaseExpired, purchase, setPurchase]);
 
+  useEffect(() => {
+    let cancelled = false;
+
+    if (!purchase?.collected || !purchase?.pickup_code || purchase?.pickup_qr_data_url) {
+      return undefined;
+    }
+
+    (async () => {
+      try {
+        const pickupAssets = await createPickupAssets(purchase.pickup_code);
+
+        if (!cancelled) {
+          setPurchase((prev) =>
+            prev
+              ? {
+                  ...prev,
+                  redeem_url: pickupAssets.redeemUrl,
+                  pickup_qr_data_url: pickupAssets.qrCodeDataUrl,
+                }
+              : prev,
+          );
+        }
+      } catch (error) {
+        console.error("Unable to generate demo pickup QR code:", error);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [purchase, setPurchase]);
+
   const startCheckout = () => {
     setPage("checkout");
   };
@@ -532,7 +582,7 @@ export default function SouvenirHuntWebsite() {
     setFeedback("That code is invalid, expired, or the hunt has already been completed.");
   };
 
-  const submitAnswer = () => {
+  const submitAnswer = async () => {
     const current = demoSteps[activeStep];
     const raw = String(answers[activeStep] || "").trim().toLowerCase();
     const ok = current.answer.some((answer) => answer.toLowerCase() === raw);
@@ -544,7 +594,21 @@ export default function SouvenirHuntWebsite() {
 
     const next = Math.min(activeStep + 1, demoSteps.length - 1);
     if (activeStep === demoSteps.length - 1) {
-      setPurchase((prev) => (prev ? { ...prev, collected: true } : prev));
+      const pickupCode = `PK-${generateCode().replace("SH-", "")}`;
+      const pickupAssets = await createPickupAssets(pickupCode);
+
+      setPurchase((prev) =>
+        prev
+          ? {
+              ...prev,
+              collected: true,
+              pickup_code: pickupCode,
+              redeem_url: pickupAssets.redeemUrl,
+              pickup_qr_data_url: pickupAssets.qrCodeDataUrl,
+              pickup_used: false,
+            }
+          : prev,
+      );
       setFeedback("Treasure claimed. Hunt complete.");
       return;
     }
@@ -1215,17 +1279,66 @@ export default function SouvenirHuntWebsite() {
     if (purchase.collected) {
       return (
         <section className="px-4 py-16 sm:px-6 lg:px-8">
-          <div className="mx-auto max-w-3xl rounded-[34px] border border-brand-100/80 bg-white/95 p-8 text-center shadow-glass">
-            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-50 text-brand-700">
-              <CheckCircle2 className="h-6 w-6" />
+          <div className="mx-auto max-w-5xl rounded-[34px] border border-brand-100/80 bg-white/95 p-8 shadow-glass sm:p-10">
+            <div className="grid gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
+              <div className="text-center lg:text-left">
+                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-50 text-brand-700 lg:mx-0">
+                  <CheckCircle2 className="h-6 w-6" />
+                </div>
+                <h1 className="mt-5 text-3xl font-semibold tracking-tight text-slate-950">Treasure claimed.</h1>
+                <p className="mt-4 text-base leading-7 text-slate-600">
+                  The Emperor&apos;s Secret is complete. Show this pickup QR to staff to confirm the
+                  souvenir handoff.
+                </p>
+                <div className="mt-6 rounded-[28px] border border-brand-100 bg-brand-50/60 p-5">
+                  <div className="text-sm font-semibold uppercase tracking-[0.18em] text-brand-700">
+                    Pickup code
+                  </div>
+                  <div className="mt-2 text-2xl font-semibold tracking-[0.18em] text-slate-950">
+                    {purchase.pickup_code || "Generating..."}
+                  </div>
+                  <p className="mt-3 text-sm leading-6 text-slate-500">
+                    If scanning fails, staff can open the redeem page and type this code manually.
+                  </p>
+                </div>
+                {purchase.redeem_url ? (
+                  <a
+                    href={purchase.redeem_url}
+                    className="mt-6 inline-flex items-center gap-2 rounded-full border border-brand-100 bg-white px-5 py-3 text-sm font-semibold text-brand-700 transition hover:border-brand-200"
+                  >
+                    Open redeem link
+                    <ArrowRight className="h-4 w-4" />
+                  </a>
+                ) : null}
+                <button onClick={() => navigate("your-hunt")} className="mt-6 block w-full rounded-full bg-brand-600 px-6 py-3 text-sm font-medium text-white lg:inline-flex lg:w-auto lg:items-center lg:justify-center">
+                  Back to Your Hunt
+                </button>
+              </div>
+
+              <div className="rounded-[32px] border border-brand-100 bg-white p-6 shadow-sm">
+                <div className="text-center">
+                  <div className="text-sm font-semibold uppercase tracking-[0.2em] text-brand-700">
+                    Staff scan
+                  </div>
+                  <p className="mt-3 text-sm leading-6 text-slate-500">
+                    Scan with a phone camera or open the redeem link on the staff device.
+                  </p>
+                </div>
+                <div className="mt-6 flex justify-center">
+                  {purchase.pickup_qr_data_url ? (
+                    <img
+                      src={purchase.pickup_qr_data_url}
+                      alt="Pickup QR code"
+                      className="h-64 w-64 rounded-[28px] border border-brand-100 bg-white p-3 shadow-sm"
+                    />
+                  ) : (
+                    <div className="flex h-64 w-64 items-center justify-center rounded-[28px] border border-dashed border-brand-200 bg-brand-50/40 text-sm text-slate-500">
+                      Generating QR...
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
-            <h1 className="mt-5 text-3xl font-semibold tracking-tight text-slate-950">Treasure claimed.</h1>
-            <p className="mt-4 text-base leading-7 text-slate-600">
-              The Emperor&apos;s Secret is complete. Your souvenir has been collected and the hunt is now finished.
-            </p>
-            <button onClick={() => navigate("your-hunt")} className="mt-8 rounded-full bg-brand-600 px-6 py-3 text-sm font-medium text-white">
-              Back to Your Hunt
-            </button>
           </div>
         </section>
       );
