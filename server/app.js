@@ -166,6 +166,62 @@ app.post("/create-checkout-session", async (request, response) => {
   }
 });
 
+app.post("/dev/create-test-session", async (request, response) => {
+  const staffPin = String(request.body.staff_pin || "").trim();
+  const email = String(request.body.email || "test@souvenirhunt.com")
+    .trim()
+    .toLowerCase();
+  const mode = String(request.body.mode || "completed").trim().toLowerCase();
+
+  if (staffPin !== config.staffPin) {
+    return response.status(401).json({ message: "Invalid staff PIN." });
+  }
+
+  try {
+    const accessKey = await generateUniqueAccessKey();
+    const createdAt = new Date();
+    const expiresAt = new Date(createdAt.getTime() + 24 * 60 * 60 * 1000);
+
+    const sessionData = {
+      email,
+      access_key: accessKey,
+      current_slide: mode === "completed" ? slides.length - 1 : 0,
+      completed_slides:
+        mode === "completed" ? slides.map((slide) => slide.index) : [],
+      is_completed: mode === "completed",
+      pickup_code: null,
+      pickup_used: false,
+      hunt_name: config.huntName,
+      expires_at: expiresAt,
+    };
+
+    if (mode === "completed") {
+      const pickupCode = await generateUniquePickupCode();
+      const redeemUrl = `${config.publicBaseUrl}/redeem?code=${pickupCode}`;
+      const qrCodeDataUrl = await createQrCodeDataUrl(redeemUrl);
+      sessionData.pickup_code = pickupCode;
+      sessionData.pickup_qr_data_url = qrCodeDataUrl;
+    }
+
+    const session = await GameSession.create(sessionData);
+
+    return response.json({
+      message:
+        mode === "completed"
+          ? "Completed test session created."
+          : "Test session created.",
+      accessLink: `${config.frontendPlayUrl}?key=${session.access_key}`,
+      redeemUrl: session.pickup_code
+        ? `${config.publicBaseUrl}/redeem?code=${session.pickup_code}`
+        : null,
+      ...await buildSessionPayload(session),
+    });
+  } catch (error) {
+    console.error("Unable to create test session:", error);
+    return response.status(500).json({ message: "Unable to create test session." });
+  }
+});
+
 app.post("/resume", async (request, response) => {
   const accessKey = String(request.body.accessKey || "").trim();
   if (!accessKey) {
