@@ -5,6 +5,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import Stripe from "stripe";
 import { config, hasStripeConfig } from "./config.js";
+import { isDatabaseReady } from "./db/connect.js";
 import { slides, getSlideByIndex } from "./data/slides.js";
 import { GameSession } from "./models/GameSession.js";
 import {
@@ -40,7 +41,11 @@ app.use(
 );
 
 app.get("/health", (_request, response) => {
-  response.json({ ok: true });
+  response.json({
+    ok: true,
+    database: isDatabaseReady() ? "connected" : "disconnected",
+    stripe: hasStripeConfig ? "configured" : "missing-config",
+  });
 });
 
 app.post(

@@ -1,7 +1,19 @@
 import mongoose from "mongoose";
 import { config } from "../config.js";
 
+let databaseReady = false;
+
 export async function connectDatabase() {
-  await mongoose.connect(config.mongodbUri);
-  console.log(`Connected to MongoDB at ${config.mongodbUri}`);
+  console.log("Connecting to MongoDB...");
+
+  await mongoose.connect(config.mongodbUri, {
+    serverSelectionTimeoutMS: 10000,
+  });
+
+  databaseReady = true;
+  console.log("Connected to MongoDB.");
+}
+
+export function isDatabaseReady() {
+  return databaseReady && mongoose.connection.readyState === 1;
 }
