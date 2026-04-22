@@ -654,123 +654,213 @@ export default function SouvenirHuntWebsite() {
 
   const renderHome = () => (
     <>
-      <section className="relative overflow-hidden px-4 pt-6 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-7xl">
-          <div className="relative overflow-hidden rounded-[42px] border border-brand-100/80 bg-hero-glow px-6 pb-10 pt-14 shadow-glass sm:px-10 sm:pb-12 sm:pt-16 lg:px-14 lg:pb-14 lg:pt-20">
-            <div className="absolute inset-0 bg-gradient-to-br from-brand-50/70 via-white to-sky-50/70" />
-            <div className="absolute -left-12 top-14 h-40 w-40 rounded-full bg-brand-200/35 blur-3xl sm:h-52 sm:w-52" />
-            <div className="absolute bottom-0 right-0 h-56 w-56 rounded-full bg-sky-200/30 blur-3xl sm:h-64 sm:w-64" />
-            <div className="relative">
-              <div className="mx-auto flex max-w-xl flex-col justify-center">
-                <motion.div
-                  initial={{ opacity: 0, y: 16 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5 }}
-                  className="rounded-[32px] border border-white/60 bg-white/55 p-1 shadow-[0_20px_60px_rgba(15,23,42,0.04)] backdrop-blur-sm"
-                >
-                  <div className="rounded-[31px] bg-white/72 px-5 py-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.7)] sm:px-6 sm:py-7 lg:px-7 lg:py-8">
-                    <div className="inline-flex items-center gap-2 rounded-full border border-brand-100 bg-white/92 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-brand-700 shadow-sm backdrop-blur">
-                      <Sparkles className="h-3.5 w-3.5" />
-                      Premium city clue hunts
-                    </div>
+      <section className="relative overflow-hidden px-4 pb-6 pt-8 sm:px-6 lg:px-8">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(10,108,255,0.12),transparent_34%),radial-gradient(circle_at_85%_20%,rgba(108,181,255,0.16),transparent_22%),linear-gradient(180deg,rgba(255,255,255,0.4),rgba(255,255,255,0))]" />
+        <div className="mx-auto max-w-6xl">
+          <motion.div
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.55 }}
+            className="relative overflow-hidden rounded-[42px] bg-white/58 px-6 pb-8 pt-8 shadow-[0_28px_80px_rgba(15,23,42,0.06)] ring-1 ring-white/75 backdrop-blur-2xl sm:px-10 sm:pb-10 sm:pt-10 lg:px-14 lg:pb-14 lg:pt-14"
+          >
+            <div className="absolute -left-12 top-0 h-44 w-44 rounded-full bg-brand-200/35 blur-3xl" />
+            <div className="absolute right-0 top-12 h-56 w-56 rounded-full bg-sky-200/35 blur-3xl" />
+            <div className="absolute bottom-0 left-1/3 h-44 w-44 rounded-full bg-brand-100/40 blur-3xl" />
 
-                    <div className="mt-7 space-y-5">
-                      <h1 className="max-w-xl text-[2.95rem] font-semibold tracking-[-0.05em] text-slate-950 sm:text-[3.6rem] sm:leading-[1.02] lg:text-[4.5rem] lg:leading-[0.98]">
-                        Discover a City Like Never Before
-                      </h1>
-                      <p className="max-w-lg text-lg leading-8 text-slate-600 sm:text-xl">
-                        Follow hidden clues. Uncover forgotten stories. Earn a real souvenir.
-                      </p>
-                      <p className="text-sm font-medium tracking-[0.03em] text-slate-500">
-                        Self-guided. Story-driven. Designed by local creators.
-                      </p>
-                    </div>
+            <div className="relative mx-auto max-w-5xl">
+              <div className="max-w-3xl">
+                <div className="inline-flex items-center gap-2 rounded-full bg-white/80 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-brand-600 shadow-[0_10px_30px_rgba(10,108,255,0.08)] ring-1 ring-brand-100/70">
+                  <Sparkles className="h-3.5 w-3.5" />
+                  Made by local artists
+                </div>
 
-                    <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-                      <button
-                        onClick={() => navigate("hunts")}
-                        className="inline-flex items-center justify-center gap-2 rounded-full bg-brand-600 px-6 py-3.5 text-sm font-semibold text-white shadow-[0_18px_35px_rgba(10,108,255,0.18)] transition hover:bg-brand-700"
-                      >
-                        Start a Hunt
-                        <ArrowRight className="h-4 w-4" />
-                      </button>
-                      <button
-                        onClick={() => navigate("your-hunt")}
-                        className="inline-flex items-center justify-center gap-2 rounded-full border border-brand-100 bg-white px-6 py-3.5 text-sm font-semibold text-slate-800 transition hover:border-brand-200 hover:text-brand-700"
-                      >
-                        Continue Your Hunt
-                        <Play className="h-4 w-4" />
-                      </button>
-                    </div>
+                <h1 className="mt-8 text-[3.35rem] font-extrabold leading-[0.95] tracking-[-0.07em] text-brand-600 sm:text-[4.7rem] lg:text-[5.9rem]">
+                  Explore the City.
+                  <br />
+                  Solve Clues.
+                  <br />
+                  Get Souvenir.
+                </h1>
 
-                  </div>
-                </motion.div>
+                <p className="mt-6 max-w-2xl text-base leading-8 text-slate-500 sm:text-lg">
+                  A clean self-guided city hunt with hidden stories, playful clues, and a keepsake at the end.
+                </p>
+
+                <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+                  <button
+                    onClick={() => navigate("hunts")}
+                    className="inline-flex items-center justify-center gap-2 rounded-full bg-brand-600 px-7 py-3.5 text-sm font-semibold text-white shadow-[0_20px_40px_rgba(10,108,255,0.2)] transition hover:-translate-y-0.5 hover:bg-brand-700"
+                  >
+                    Start a Hunt
+                    <ArrowRight className="h-4 w-4" />
+                  </button>
+                  <button
+                    onClick={() => navigate("your-hunt")}
+                    className="inline-flex items-center justify-center gap-2 rounded-full bg-white/82 px-7 py-3.5 text-sm font-semibold text-brand-700 shadow-[0_14px_35px_rgba(15,23,42,0.06)] ring-1 ring-brand-100/80 transition hover:-translate-y-0.5 hover:bg-white"
+                  >
+                    Continue Your Hunt
+                    <Play className="h-4 w-4" />
+                  </button>
+                </div>
               </div>
+
+              <motion.div
+                initial={{ opacity: 0, scale: 0.98, y: 14 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.12 }}
+                className="mt-10 overflow-hidden rounded-[34px] bg-gradient-to-br from-[#a9ccff] via-[#dcecff] to-[#f7fbff] p-4 shadow-[0_24px_60px_rgba(110,167,255,0.22)] ring-1 ring-white/70 sm:p-6"
+              >
+                <svg
+                  viewBox="0 0 360 240"
+                  className="h-auto w-full"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  aria-hidden="true"
+                >
+                  <path d="M42 176L94 180L146 168L202 176L298 146" stroke="white" strokeWidth="4" strokeLinecap="round" />
+                  <path d="M60 138L170 144L308 94" stroke="white" strokeWidth="4" strokeLinecap="round" />
+                  <path d="M88 76L86 178" stroke="white" strokeWidth="4" strokeLinecap="round" />
+                  <path d="M126 66L124 170" stroke="white" strokeWidth="4" strokeLinecap="round" />
+                  <path d="M188 50L184 176" stroke="white" strokeWidth="4" strokeLinecap="round" />
+                  <path d="M246 42L298 44L312 94L322 150L266 162L244 96L246 42Z" stroke="white" strokeWidth="4" strokeLinejoin="round" />
+                  <path d="M126 66L188 70L246 42" stroke="white" strokeWidth="4" strokeLinejoin="round" />
+                  <path d="M52 94L86 96L88 76L126 66" stroke="white" strokeWidth="4" strokeLinejoin="round" />
+                  <path d="M42 132L60 138L52 94" stroke="white" strokeWidth="4" strokeLinejoin="round" />
+                  <motion.path
+                    d="M92 122H126V170H92"
+                    stroke="#0A51D8"
+                    strokeWidth="3"
+                    strokeDasharray="4 5"
+                    initial={{ pathLength: 0 }}
+                    whileInView={{ pathLength: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 1.1, ease: "easeInOut" }}
+                  />
+                  <motion.path
+                    d="M68 122H92"
+                    stroke="#0A51D8"
+                    strokeWidth="3"
+                    strokeLinecap="round"
+                    initial={{ pathLength: 0 }}
+                    whileInView={{ pathLength: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.55, delay: 0.1 }}
+                  />
+                  <motion.path
+                    d="M80 116L92 122L80 128"
+                    stroke="#0A51D8"
+                    strokeWidth="3"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    initial={{ pathLength: 0 }}
+                    whileInView={{ pathLength: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.45, delay: 0.15 }}
+                  />
+                  <motion.path
+                    d="M126 170H168"
+                    stroke="#0A51D8"
+                    strokeWidth="3"
+                    strokeDasharray="4 5"
+                    initial={{ pathLength: 0 }}
+                    whileInView={{ pathLength: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.65, delay: 0.35 }}
+                  />
+                  <motion.path
+                    d="M168 170L176 178L184 170"
+                    stroke="#0A51D8"
+                    strokeWidth="3"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    initial={{ pathLength: 0 }}
+                    whileInView={{ pathLength: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4, delay: 0.8 }}
+                  />
+                </svg>
+              </motion.div>
             </div>
           </div>
         </div>
       </section>
 
       <motion.section ref={aboutRef} {...sectionFade} className="scroll-mt-28 px-4 py-24 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-7xl">
-          <div className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:gap-10">
-            <div className="rounded-[34px] border border-brand-100/80 bg-white/96 p-8 shadow-sm sm:p-10 lg:p-12">
-              <div className="text-sm font-semibold uppercase tracking-[0.25em] text-brand-700">About</div>
-              <h2 className="mt-4 max-w-xl text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl lg:text-[3rem] lg:leading-[1.04]">
-                Sightseeing made worth remembering.
-              </h2>
-              <div className="mt-6 space-y-5 text-base leading-8 text-slate-600 sm:text-lg">
-                <p>Souvenir Hunt transforms cities into living stories.</p>
-                <p>
-                  We create premium clue-hunt experiences that guide you through real locations
-                  - not as a tourist, but as a participant in something hidden beneath the
-                  surface.
-                </p>
-                <p>
-                  Each hunt is carefully designed to blend history, mystery, and exploration.
-                  You don&apos;t just visit landmarks - you interact with them, decode them, and
-                  see them differently.
-                </p>
-                <p>And at the end, you don&apos;t leave with just photos.</p>
-                <p>
-                  You leave with a physical souvenir - a real reward tied to the journey you just
-                  completed.
-                </p>
-              </div>
+        <div className="mx-auto grid max-w-6xl gap-14 lg:grid-cols-[1.05fr_0.95fr] lg:items-start">
+          <div>
+            <div className="text-sm font-semibold uppercase tracking-[0.25em] text-brand-600">About</div>
+            <h2 className="mt-4 max-w-2xl text-3xl font-semibold tracking-[-0.04em] text-slate-950 sm:text-4xl lg:text-[3.2rem] lg:leading-[1.02]">
+              Sightseeing made worth remembering.
+            </h2>
+            <div className="mt-6 max-w-2xl space-y-5 text-base leading-8 text-slate-600 sm:text-lg">
+              <p>Souvenir Hunt turns real streets into story-led city experiences.</p>
+              <p>
+                We guide you through meaningful locations, hidden details, and memorable clues so the city feels discovered rather than consumed.
+              </p>
+              <p>
+                At the end, you leave with something physical and worth keeping.
+              </p>
             </div>
+          </div>
 
+          <div className="space-y-8 pt-2">
+            {[
+              [
+                MapPin,
+                "Real places, not generic routes",
+                "Walk somewhere that matters instead of following another standard tour path.",
+              ],
+              [
+                Search,
+                "A calmer kind of puzzle",
+                "The challenge is designed to feel elegant and rewarding, never noisy or random.",
+              ],
+              [
+                Sparkles,
+                "A souvenir tied to the journey",
+                "The final reward feels connected to the route you just completed.",
+              ],
+            ].map(([Icon, title, text]) => (
+              <div key={title} className="flex gap-4">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white/90 text-brand-600 shadow-[0_14px_35px_rgba(10,108,255,0.08)] ring-1 ring-brand-100/70">
+                  <Icon className="h-5 w-5" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold tracking-tight text-slate-950">{title}</h3>
+                  <p className="mt-2 text-sm leading-7 text-slate-500 sm:text-base">{text}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </motion.section>
 
       <motion.section ref={artistsRef} {...sectionFade} className="scroll-mt-28 px-4 py-24 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-7xl overflow-hidden rounded-[38px] border border-brand-100/80 bg-gradient-to-b from-brand-50/55 via-white to-white p-8 shadow-sm sm:p-10 lg:p-12">
-          <div className="grid gap-10 lg:grid-cols-[0.92fr_1.08fr] lg:gap-12">
-            <div className="max-w-xl">
-              <div className="text-sm font-semibold uppercase tracking-[0.25em] text-brand-700">Artists & Makers</div>
-              <h2 className="mt-4 text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl lg:text-[3rem] lg:leading-[1.04]">
-                Created by Local Artists and Game Makers
-              </h2>
-              <div className="mt-6 space-y-5 text-base leading-8 text-slate-600 sm:text-lg">
-                <p>
-                  Every Souvenir Hunt is created in collaboration with local artists,
-                  storytellers, and game designers.
-                </p>
-                <p>
-                  They shape the narrative. They design the puzzles. They craft the final reward.
-                </p>
-                <p>
-                  This makes every hunt feel rooted in the culture, history, and creativity of the
-                  city itself.
-                </p>
-              </div>
-              <p className="mt-8 text-sm font-semibold uppercase tracking-[0.22em] text-slate-500">
-                Not mass-produced tours.
-                <br />
-                <span className="mt-2 inline-block text-brand-700">Local stories, told properly.</span>
-              </p>
-            </div>
+        <div className="mx-auto max-w-6xl rounded-[42px] bg-[radial-gradient(circle_at_top_left,rgba(10,108,255,0.12),transparent_28%),linear-gradient(180deg,rgba(255,255,255,0.72),rgba(255,255,255,0.48))] p-8 shadow-[0_28px_80px_rgba(15,23,42,0.05)] ring-1 ring-white/75 backdrop-blur-2xl sm:p-10 lg:p-14">
+          <div className="max-w-3xl">
+            <div className="text-sm font-semibold uppercase tracking-[0.25em] text-brand-600">Artists & Makers</div>
+            <h2 className="mt-4 text-3xl font-semibold tracking-[-0.04em] text-slate-950 sm:text-4xl lg:text-[3rem] lg:leading-[1.04]">
+              Built with local artists, storytellers, and game makers.
+            </h2>
+            <p className="mt-6 text-base leading-8 text-slate-600 sm:text-lg">
+              Each hunt is shaped by people who know how to turn a city into something cultural, playful, and worth remembering.
+            </p>
+          </div>
 
+          <div className="mt-10 grid gap-8 md:grid-cols-3">
+            {[
+              [Compass, "Storytelling", "Narratives that feel rooted in place rather than copied from a template."],
+              [Search, "Puzzle Design", "Clues paced to feel polished, intuitive, and satisfying to solve."],
+              [Sparkles, "Souvenir Craft", "A physical ending that feels local, memorable, and earned."],
+            ].map(([Icon, title, text]) => (
+              <div key={title} className="rounded-[30px] bg-white/55 p-6 shadow-[0_18px_50px_rgba(15,23,42,0.04)] ring-1 ring-white/70 backdrop-blur">
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-50 text-brand-600">
+                  <Icon className="h-5 w-5" />
+                </div>
+                <h3 className="mt-5 text-xl font-semibold tracking-tight text-slate-950">{title}</h3>
+                <p className="mt-3 text-sm leading-7 text-slate-500">{text}</p>
+              </div>
+            ))}
           </div>
         </div>
       </motion.section>
@@ -788,7 +878,7 @@ export default function SouvenirHuntWebsite() {
               <motion.div
                 key={review.name}
                 whileHover={{ y: -4 }}
-                className="rounded-[32px] border border-brand-100/80 bg-white/95 p-8 shadow-sm transition-shadow hover:shadow-card"
+                className="rounded-[32px] bg-white/72 p-8 shadow-[0_20px_50px_rgba(15,23,42,0.05)] ring-1 ring-white/75 backdrop-blur-xl transition-shadow hover:shadow-[0_28px_60px_rgba(15,23,42,0.08)]"
               >
                 <div className="flex items-center gap-1 text-brand-600">
                   {Array.from({ length: 5 }).map((_, index) => (
@@ -807,14 +897,14 @@ export default function SouvenirHuntWebsite() {
       </motion.section>
 
       <motion.section ref={contactPreviewRef} {...sectionFade} className="scroll-mt-28 px-4 py-24 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-7xl overflow-hidden rounded-[38px] border border-brand-100 bg-gradient-to-br from-brand-700 via-brand-600 to-sky-500 p-8 text-white shadow-glass sm:p-10 lg:p-12">
+        <div className="mx-auto max-w-6xl overflow-hidden rounded-[42px] bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.18),transparent_24%),linear-gradient(135deg,#1f6dff_0%,#0c57e8_55%,#5aa5ff_100%)] p-8 text-white shadow-[0_34px_100px_rgba(10,108,255,0.22)] sm:p-10 lg:p-14">
           <div className="grid gap-8 lg:grid-cols-[1fr_280px] lg:items-center">
             <div className="max-w-2xl">
-              <div className="text-sm font-semibold uppercase tracking-[0.25em] text-blue-100">Contact</div>
-              <h2 className="mt-4 text-3xl font-semibold tracking-tight sm:text-4xl lg:text-[2.9rem]">
+              <div className="text-sm font-semibold uppercase tracking-[0.25em] text-blue-100/85">Contact</div>
+              <h2 className="mt-4 text-3xl font-semibold tracking-[-0.04em] sm:text-4xl lg:text-[3rem]">
                 Create Something Worth Discovering
               </h2>
-              <p className="mt-4 text-lg font-medium text-white">
+              <p className="mt-4 text-lg font-medium text-white/95">
                 Want to partner, create, or launch a hunt?
               </p>
               <p className="mt-4 max-w-2xl text-sm leading-7 text-blue-50/90 sm:text-base">
@@ -824,7 +914,7 @@ export default function SouvenirHuntWebsite() {
                 Let&apos;s build something people will remember.
               </p>
             </div>
-            <div className="rounded-[30px] border border-white/15 bg-white/10 p-5 shadow-[0_18px_45px_rgba(15,23,42,0.18)] backdrop-blur">
+            <div className="rounded-[32px] bg-white/12 p-5 shadow-[0_22px_55px_rgba(15,23,42,0.18)] ring-1 ring-white/20 backdrop-blur-xl">
               <button onClick={() => navigate("contact")} className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-white px-6 py-3.5 text-sm font-semibold text-brand-700 transition hover:bg-blue-50">
                 Contact Us
                 <Mail className="h-4 w-4" />
