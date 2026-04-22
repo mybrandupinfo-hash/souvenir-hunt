@@ -225,6 +225,10 @@ function getRedeemBaseUrl() {
   );
 }
 
+function getApiBaseUrl() {
+  return getRedeemBaseUrl();
+}
+
 function useLocalStorage(key, initialValue) {
   const [value, setValue] = useState(() => {
     if (typeof window === "undefined") return initialValue;
@@ -648,23 +652,61 @@ export default function SouvenirHuntWebsite() {
 
     const next = Math.min(activeStep + 1, demoSteps.length - 1);
     if (activeStep === demoSteps.length - 1) {
-      const pickupCode = `PK-${generateCode().replace("SH-", "")}`;
-      const pickupAssets = await createPickupAssets(pickupCode);
+      try {
+        const response = await fetch(
+          `${getApiBaseUrl()}/demo/create-completed-session`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              email: purchase?.email || "demo@souvenirhunt.com",
+            }),
+          },
+        );
 
-      setPurchase((prev) =>
-        prev
-          ? {
-              ...prev,
-              collected: true,
-              pickup_code: pickupCode,
-              redeem_url: pickupAssets.redeemUrl,
-              pickup_qr_data_url: pickupAssets.qrCodeDataUrl,
-              pickup_used: false,
-            }
-          : prev,
-      );
-      setFeedback("Treasure claimed. Hunt complete.");
-      return;
+        if (!response.ok) {
+          throw new Error("Unable to create redeemable pickup session.");
+        }
+
+        const data = await response.json();
+
+        setPurchase((prev) =>
+          prev
+            ? {
+                ...prev,
+                collected: true,
+                pickup_code: data.session?.pickup_code || null,
+                redeem_url: data.redeemUrl || null,
+                pickup_qr_data_url: data.session?.qr_code_data_url || null,
+                pickup_used: data.session?.pickup_used || false,
+              }
+            : prev,
+        );
+        setFeedback("Treasure claimed. Hunt complete.");
+        return;
+      } catch (error) {
+        console.error("Unable to create backend pickup session:", error);
+
+        const pickupCode = `PK-${generateCode().replace("SH-", "")}`;
+        const pickupAssets = await createPickupAssets(pickupCode);
+
+        setPurchase((prev) =>
+          prev
+            ? {
+                ...prev,
+                collected: true,
+                pickup_code: pickupCode,
+                redeem_url: pickupAssets.redeemUrl,
+                pickup_qr_data_url: pickupAssets.qrCodeDataUrl,
+                pickup_used: false,
+              }
+            : prev,
+        );
+        setFeedback("Treasure claimed. Hunt complete.");
+        return;
+      }
     }
 
     setUnlockedStep(Math.max(unlockedStep, next));

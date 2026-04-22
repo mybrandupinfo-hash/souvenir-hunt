@@ -222,6 +222,46 @@ app.post("/dev/create-test-session", async (request, response) => {
   }
 });
 
+app.post("/demo/create-completed-session", async (request, response) => {
+  const email = String(request.body.email || "demo@souvenirhunt.com")
+    .trim()
+    .toLowerCase();
+
+  try {
+    const accessKey = await generateUniqueAccessKey();
+    const pickupCode = await generateUniquePickupCode();
+    const createdAt = new Date();
+    const expiresAt = new Date(createdAt.getTime() + 24 * 60 * 60 * 1000);
+    const redeemUrl = `${config.publicBaseUrl}/redeem?code=${pickupCode}`;
+    const qrCodeDataUrl = await createQrCodeDataUrl(redeemUrl);
+
+    const session = await GameSession.create({
+      email,
+      access_key: accessKey,
+      current_slide: slides.length - 1,
+      completed_slides: slides.map((slide) => slide.index),
+      is_completed: true,
+      pickup_code: pickupCode,
+      pickup_qr_data_url: qrCodeDataUrl,
+      pickup_used: false,
+      hunt_name: config.huntName,
+      expires_at: expiresAt,
+    });
+
+    return response.json({
+      message: "Demo completed session created.",
+      accessLink: `${config.frontendPlayUrl}?key=${session.access_key}`,
+      redeemUrl,
+      ...await buildSessionPayload(session),
+    });
+  } catch (error) {
+    console.error("Unable to create demo completed session:", error);
+    return response
+      .status(500)
+      .json({ message: "Unable to create demo completed session." });
+  }
+});
+
 app.post("/resume", async (request, response) => {
   const accessKey = String(request.body.accessKey || "").trim();
   if (!accessKey) {
