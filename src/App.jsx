@@ -780,8 +780,8 @@ export default function SouvenirHuntWebsite() {
                   />
                 </svg>
               </motion.div>
-            </div>
-          </div>
+              </div>
+          </motion.div>
         </div>
       </section>
 
