@@ -654,59 +654,125 @@ export default function SouvenirHuntWebsite() {
 
   const renderHome = () => (
     <>
-      <section className="relative overflow-hidden px-4 pt-6 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-7xl">
-          <div className="relative overflow-hidden rounded-[42px] border border-brand-100/80 bg-hero-glow px-6 pb-10 pt-14 shadow-glass sm:px-10 sm:pb-12 sm:pt-16 lg:px-14 lg:pb-14 lg:pt-20">
-            <div className="absolute inset-0 bg-gradient-to-br from-brand-50/70 via-white to-sky-50/70" />
-            <div className="absolute -left-12 top-14 h-40 w-40 rounded-full bg-brand-200/35 blur-3xl sm:h-52 sm:w-52" />
-            <div className="absolute bottom-0 right-0 h-56 w-56 rounded-full bg-sky-200/30 blur-3xl sm:h-64 sm:w-64" />
-            <div className="relative">
-              <div className="mx-auto flex max-w-xl flex-col justify-center">
-                <motion.div
-                  initial={{ opacity: 0, y: 16 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5 }}
-                  className="rounded-[32px] border border-white/60 bg-white/55 p-1 shadow-[0_20px_60px_rgba(15,23,42,0.04)] backdrop-blur-sm"
+      <section className="relative overflow-hidden px-4 pb-10 pt-6 sm:px-6 lg:px-8">
+        <div
+          className="absolute inset-0 opacity-60"
+          style={{
+            backgroundImage:
+              "radial-gradient(circle, rgba(10,108,255,0.18) 1px, transparent 1px)",
+            backgroundSize: "12px 12px",
+          }}
+        />
+        <div className="relative mx-auto max-w-md lg:max-w-5xl">
+          <div className="rounded-[44px] border border-slate-900 bg-white px-4 pb-6 pt-4 shadow-[0_24px_80px_rgba(15,23,42,0.06)] sm:px-6 sm:pb-8 sm:pt-5 lg:px-10 lg:pb-10 lg:pt-8">
+            <div className="rounded-full border border-brand-100 bg-white px-4 py-3 shadow-[0_12px_28px_rgba(10,108,255,0.10)]">
+              <div className="flex items-center justify-between gap-3">
+                <button onClick={() => navigate("home")} className="min-w-0 text-left">
+                  <Logo />
+                </button>
+                <button
+                  onClick={() => setMobileMenuOpen((prev) => !prev)}
+                  className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-brand-600 text-white shadow-[0_14px_24px_rgba(10,108,255,0.24)] transition hover:bg-brand-700"
+                  aria-label="Toggle menu"
+                  aria-expanded={mobileMenuOpen}
                 >
-                  <div className="rounded-[31px] bg-white/72 px-5 py-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.7)] sm:px-6 sm:py-7 lg:px-7 lg:py-8">
-                    <div className="inline-flex items-center gap-2 rounded-full border border-brand-100 bg-white/92 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-brand-700 shadow-sm backdrop-blur">
-                      <Sparkles className="h-3.5 w-3.5" />
-                      Premium city clue hunts
-                    </div>
-
-                    <div className="mt-7 space-y-5">
-                      <h1 className="max-w-xl text-[2.95rem] font-semibold tracking-[-0.05em] text-slate-950 sm:text-[3.6rem] sm:leading-[1.02] lg:text-[4.5rem] lg:leading-[0.98]">
-                        Discover a City Like Never Before
-                      </h1>
-                      <p className="max-w-lg text-lg leading-8 text-slate-600 sm:text-xl">
-                        Follow hidden clues. Uncover forgotten stories. Earn a real souvenir.
-                      </p>
-                      <p className="text-sm font-medium tracking-[0.03em] text-slate-500">
-                        Self-guided. Story-driven. Designed by local creators.
-                      </p>
-                    </div>
-
-                    <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-                      <button
-                        onClick={() => navigate("hunts")}
-                        className="inline-flex items-center justify-center gap-2 rounded-full bg-brand-600 px-6 py-3.5 text-sm font-semibold text-white shadow-[0_18px_35px_rgba(10,108,255,0.18)] transition hover:bg-brand-700"
-                      >
-                        Start a Hunt
-                        <ArrowRight className="h-4 w-4" />
-                      </button>
-                      <button
-                        onClick={() => navigate("your-hunt")}
-                        className="inline-flex items-center justify-center gap-2 rounded-full border border-brand-100 bg-white px-6 py-3.5 text-sm font-semibold text-slate-800 transition hover:border-brand-200 hover:text-brand-700"
-                      >
-                        Continue Your Hunt
-                        <Play className="h-4 w-4" />
-                      </button>
-                    </div>
-
-                  </div>
-                </motion.div>
+                  <span className="relative flex h-5 w-5 items-center justify-center">
+                    <motion.span
+                      animate={mobileMenuOpen ? { rotate: 45, y: 0 } : { rotate: 0, y: -5 }}
+                      transition={{ duration: 0.2 }}
+                      className="absolute h-[2px] w-4 rounded-full bg-white"
+                    />
+                    <motion.span
+                      animate={mobileMenuOpen ? { opacity: 0, scaleX: 0.2 } : { opacity: 1, scaleX: 1 }}
+                      transition={{ duration: 0.18 }}
+                      className="absolute h-[2px] w-4 rounded-full bg-white"
+                    />
+                    <motion.span
+                      animate={mobileMenuOpen ? { rotate: -45, y: 0 } : { rotate: 0, y: 5 }}
+                      transition={{ duration: 0.2 }}
+                      className="absolute h-[2px] w-4 rounded-full bg-white"
+                    />
+                  </span>
+                </button>
               </div>
             </div>
+
+            <AnimatePresence>
+              {mobileMenuOpen ? (
+                <motion.div
+                  initial={{ opacity: 0, y: -8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.18 }}
+                  className="mt-3 rounded-[28px] border border-brand-100 bg-white p-3 shadow-sm"
+                >
+                  <div className="grid gap-2">
+                    <button onClick={() => navigate("hunts")} className="rounded-2xl px-4 py-3 text-left text-sm font-medium text-slate-700 transition hover:bg-brand-50 hover:text-brand-700">Our Hunts</button>
+                    <button onClick={() => navigate("your-hunt")} className="rounded-2xl px-4 py-3 text-left text-sm font-medium text-slate-700 transition hover:bg-brand-50 hover:text-brand-700">Your Hunt</button>
+                    <button onClick={() => scrollToSection(aboutRef)} className="rounded-2xl px-4 py-3 text-left text-sm font-medium text-slate-700 transition hover:bg-brand-50 hover:text-brand-700">About</button>
+                    <button onClick={() => scrollToSection(contactPreviewRef)} className="rounded-2xl px-4 py-3 text-left text-sm font-medium text-slate-700 transition hover:bg-brand-50 hover:text-brand-700">Contact</button>
+                  </div>
+                </motion.div>
+              ) : null}
+            </AnimatePresence>
+
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.45 }}
+              className="mx-auto max-w-md pt-8 sm:pt-10"
+            >
+              <h1 className="text-[3.2rem] font-extrabold leading-[0.95] tracking-[-0.06em] text-brand-600 sm:text-[4rem] lg:text-[4.75rem]">
+                Explore the City.
+                <br />
+                Solve Clues.
+                <br />
+                Get Souvenir.
+              </h1>
+              <p className="mt-5 text-lg font-medium text-brand-600">
+                Made by local artists.
+              </p>
+
+              <div className="mt-7 overflow-hidden rounded-[22px] bg-[#9fc6ff] p-4 sm:p-5">
+                <svg
+                  viewBox="0 0 320 220"
+                  className="h-auto w-full"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  aria-hidden="true"
+                >
+                  <path d="M36 166L86 168L126 160L182 166L270 138" stroke="white" strokeWidth="4" strokeLinecap="round" />
+                  <path d="M60 130L152 136L280 92" stroke="white" strokeWidth="4" strokeLinecap="round" />
+                  <path d="M82 72L80 166" stroke="white" strokeWidth="4" strokeLinecap="round" />
+                  <path d="M118 64L116 161" stroke="white" strokeWidth="4" strokeLinecap="round" />
+                  <path d="M180 50L178 165" stroke="white" strokeWidth="4" strokeLinecap="round" />
+                  <path d="M230 46L266 46L280 92L290 144L244 158L230 92L230 46Z" stroke="white" strokeWidth="4" strokeLinejoin="round" />
+                  <path d="M118 64L180 68L230 46" stroke="white" strokeWidth="4" strokeLinejoin="round" />
+                  <path d="M48 88L80 90L82 72L118 64" stroke="white" strokeWidth="4" strokeLinejoin="round" />
+                  <path d="M36 126L60 130L48 88" stroke="white" strokeWidth="4" strokeLinejoin="round" />
+                  <path d="M82 118H118V160H82" stroke="#0A51D8" strokeWidth="3" strokeDasharray="3 5" />
+                  <path d="M58 118H82" stroke="#0A51D8" strokeWidth="3" strokeLinecap="round" />
+                  <path d="M74 112L82 118L74 124" stroke="#0A51D8" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M118 160H152" stroke="#0A51D8" strokeWidth="3" strokeDasharray="3 5" />
+                  <path d="M152 160L160 168L168 160" stroke="#0A51D8" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </div>
+
+              <div className="mt-8 flex flex-col items-center gap-4">
+                <button
+                  onClick={() => navigate("hunts")}
+                  className="inline-flex min-w-[230px] items-center justify-center rounded-full bg-brand-700 px-8 py-4 text-xl font-bold text-white shadow-[0_16px_30px_rgba(10,108,255,0.18)] transition hover:bg-brand-600"
+                >
+                  Start Hunt
+                </button>
+                <button
+                  onClick={() => navigate("your-hunt")}
+                  className="inline-flex min-w-[290px] items-center justify-center rounded-full border-2 border-brand-600 bg-white px-8 py-4 text-xl font-bold text-brand-600 transition hover:bg-brand-50"
+                >
+                  Continue Your Hunt
+                </button>
+              </div>
+            </motion.div>
           </div>
         </div>
       </section>
@@ -1298,6 +1364,7 @@ export default function SouvenirHuntWebsite() {
 
   return (
     <div className="min-h-screen bg-transparent text-slate-900">
+      {page !== "home" ? (
       <header className="sticky top-0 z-50 py-4">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between rounded-full border border-brand-100 bg-white px-4 py-3 shadow-sm sm:px-6">
@@ -1398,6 +1465,7 @@ export default function SouvenirHuntWebsite() {
           </AnimatePresence>
         </div>
       </header>
+      ) : null}
 
       <main>
         {page === "home" && renderHome()}
