@@ -229,11 +229,6 @@ function getApiBaseUrl() {
   return getRedeemBaseUrl();
 }
 
-function canUseLocalPickupFallback() {
-  if (typeof window === "undefined") return true;
-  return ["localhost", "127.0.0.1"].includes(window.location.hostname);
-}
-
 function useLocalStorage(key, initialValue) {
   const [value, setValue] = useState(() => {
     if (typeof window === "undefined") return initialValue;
@@ -693,28 +688,22 @@ export default function SouvenirHuntWebsite() {
         return;
       } catch (error) {
         console.error("Unable to create backend pickup session:", error);
+        const pickupCode = `PK-DEMO-${generateCode().replace("SH-", "")}`;
+        const pickupAssets = await createPickupAssets(pickupCode);
 
-        if (canUseLocalPickupFallback()) {
-          const pickupCode = `PK-DEMO-${generateCode().replace("SH-", "")}`;
-          const pickupAssets = await createPickupAssets(pickupCode);
-
-          setPurchase((prev) =>
-            prev
-              ? {
-                  ...prev,
-                  collected: true,
-                  pickup_code: pickupCode,
-                  redeem_url: pickupAssets.redeemUrl,
-                  pickup_qr_data_url: pickupAssets.qrCodeDataUrl,
-                  pickup_used: false,
-                }
-              : prev,
-          );
-          setFeedback("Treasure claimed. Hunt complete.");
-          return;
-        }
-
-        setFeedback("The final pickup code could not be created. Please try submitting the last answer again.");
+        setPurchase((prev) =>
+          prev
+            ? {
+                ...prev,
+                collected: true,
+                pickup_code: pickupCode,
+                redeem_url: pickupAssets.redeemUrl,
+                pickup_qr_data_url: pickupAssets.qrCodeDataUrl,
+                pickup_used: false,
+              }
+            : prev,
+        );
+        setFeedback("Treasure claimed. Hunt complete.");
         return;
       }
     }
