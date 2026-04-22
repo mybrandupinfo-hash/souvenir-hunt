@@ -182,6 +182,49 @@ const sectionFade = {
   transition: { duration: 0.6 },
 };
 
+const FRONTEND_ROUTES = new Set([
+  "/",
+  "/hunts",
+  "/hunt-details",
+  "/checkout",
+  "/your-hunt",
+  "/play",
+  "/contact",
+]);
+
+function getInitialPage() {
+  if (typeof window === "undefined") return "home";
+
+  switch (window.location.pathname) {
+    case "/hunts":
+      return "hunts";
+    case "/hunt-details":
+      return "hunt-details";
+    case "/checkout":
+      return "checkout";
+    case "/your-hunt":
+      return "your-hunt";
+    case "/play":
+      return "play";
+    case "/contact":
+      return "contact";
+    default:
+      return "home";
+  }
+}
+
+function getRedeemBaseUrl() {
+  if (typeof window === "undefined") {
+    return "https://souvenir-hunt-production-6a0e.up.railway.app";
+  }
+
+  return (
+    import.meta.env.VITE_REDEEM_BASE_URL ||
+    import.meta.env.VITE_API_BASE_URL ||
+    "https://souvenir-hunt-production-6a0e.up.railway.app"
+  );
+}
+
 function useLocalStorage(key, initialValue) {
   const [value, setValue] = useState(() => {
     if (typeof window === "undefined") return initialValue;
@@ -220,7 +263,7 @@ function formatTimeLeft(expiry) {
 }
 
 async function createPickupAssets(pickupCode) {
-  const redeemUrl = `${window.location.origin}/redeem?code=${pickupCode}`;
+  const redeemUrl = `${getRedeemBaseUrl()}/redeem?code=${pickupCode}`;
   const qrCodeDataUrl = await QRCode.toDataURL(redeemUrl, {
     margin: 1,
     width: 240,
@@ -380,7 +423,7 @@ export default function SouvenirHuntWebsite() {
   const partnersRef = useRef(null);
   const contactPreviewRef = useRef(null);
 
-  const [page, setPage] = useState("home");
+  const [page, setPage] = useState(getInitialPage);
   const [selectedHunt, setSelectedHunt] = useState(countries[0].cities[0].hunts[0]);
   const [purchase, setPurchase] = useLocalStorage("souvenir-hunt-purchase", null);
   const [resumeCode, setResumeCode] = useState("");
@@ -398,6 +441,17 @@ export default function SouvenirHuntWebsite() {
   useEffect(() => {
     const id = window.setInterval(() => setClockTick(Date.now()), 60000);
     return () => window.clearInterval(id);
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const syncPageWithLocation = () => {
+      setPage(getInitialPage());
+    };
+
+    window.addEventListener("popstate", syncPageWithLocation);
+    return () => window.removeEventListener("popstate", syncPageWithLocation);
   }, []);
 
   const isPurchaseExpired = useMemo(() => {
@@ -624,6 +678,12 @@ export default function SouvenirHuntWebsite() {
   const navigate = (nextPage) => {
     setPage(nextPage);
     setMobileMenuOpen(false);
+    if (typeof window !== "undefined") {
+      const nextPath = nextPage === "home" ? "/" : `/${nextPage}`;
+      if (FRONTEND_ROUTES.has(nextPath) && window.location.pathname !== nextPath) {
+        window.history.pushState({}, "", nextPath);
+      }
+    }
     scrollToTop();
   };
 
