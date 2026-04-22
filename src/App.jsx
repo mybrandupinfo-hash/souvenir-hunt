@@ -130,15 +130,6 @@ const demoSteps = [
   },
 ];
 
-const partners = [
-  "Split Culture",
-  "Local Makers",
-  "Adriatic Stories",
-  "City Walks",
-  "Artisans Guild",
-  "Visit Split",
-];
-
 const artists = [
   {
     name: "Local Game Makers",
@@ -301,84 +292,6 @@ function Logo() {
   );
 }
 
-function TreasureMapCard() {
-  return (
-    <div className="relative overflow-hidden rounded-[34px] border border-brand-100/80 bg-white/90 p-4 shadow-glass backdrop-blur-xl">
-      <div className="absolute -left-10 top-10 h-28 w-28 rounded-full bg-brand-200/50 blur-3xl" />
-      <div className="absolute -right-8 bottom-8 h-28 w-28 rounded-full bg-sky-200/50 blur-3xl" />
-      <div className="relative rounded-[28px] border border-brand-100 bg-gradient-to-br from-white via-brand-50/80 to-sky-50 p-5">
-        <div className="flex items-start justify-between">
-          <div>
-            <div className="text-xs font-semibold uppercase tracking-[0.22em] text-brand-700">
-              Featured in Split
-            </div>
-            <div className="mt-2 text-2xl font-semibold tracking-tight text-slate-950">
-              The Emperor&apos;s Secret
-            </div>
-          </div>
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-brand-100 bg-white/80 text-brand-700 shadow-sm">
-            <Sparkles className="h-5 w-5" />
-          </div>
-        </div>
-        <div className="relative mt-8 overflow-hidden rounded-[28px] border border-brand-100 bg-white/75 p-4">
-          <div className="absolute left-5 top-5 flex h-12 w-12 items-center justify-center rounded-full border border-brand-100 bg-white/80 text-xs font-semibold text-brand-700">
-            N
-          </div>
-          <svg
-            viewBox="0 0 420 260"
-            className="h-[250px] w-full"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true"
-          >
-            <rect x="1" y="1" width="418" height="258" rx="24" stroke="rgba(10,108,255,0.08)" />
-            <path
-              d="M62 194C91 160 126 144 168 150C210 156 232 126 246 100C260 74 290 56 338 54"
-              stroke="url(#routeGradient)"
-              strokeWidth="7"
-              strokeLinecap="round"
-              strokeDasharray="10 14"
-            />
-            <circle cx="68" cy="190" r="10" fill="#2A8CFF" />
-            <circle cx="208" cy="145" r="10" fill="#2A8CFF" />
-            <circle cx="340" cy="56" r="13" fill="#0A6CFF" />
-            <circle cx="340" cy="56" r="24" fill="rgba(42,140,255,0.12)" />
-            <path d="M324 44L356 68M356 44L324 68" stroke="#0A6CFF" strokeWidth="3" strokeLinecap="round" />
-            <defs>
-              <linearGradient id="routeGradient" x1="62" y1="194" x2="338" y2="54" gradientUnits="userSpaceOnUse">
-                <stop stopColor="#8DC3FF" />
-                <stop offset="1" stopColor="#0A6CFF" />
-              </linearGradient>
-            </defs>
-          </svg>
-          <div className="absolute bottom-5 left-5 rounded-full border border-brand-100 bg-white/85 px-3 py-1 text-xs font-medium text-slate-600">
-            Start
-          </div>
-          <div className="absolute left-[44%] top-[58%] rounded-full border border-brand-100 bg-white/85 px-3 py-1 text-xs font-medium text-slate-600">
-            Clue
-          </div>
-          <div className="absolute right-5 top-5 rounded-full border border-brand-100 bg-white/85 px-3 py-1 text-xs font-medium text-slate-600">
-            Treasure
-          </div>
-        </div>
-        <div className="mt-5 grid gap-3 sm:grid-cols-2">
-          {[
-            [MapPin, "Old Town route"],
-            [Clock, "1.5-2.5 hours"],
-            [Users, "1-6 players"],
-            [KeyRound, "24h access"],
-          ].map(([Icon, label]) => (
-            <div key={label} className="rounded-2xl border border-brand-100 bg-white/80 p-4 text-sm text-slate-700">
-              <Icon className="mb-2 h-4 w-4 text-brand-700" />
-              {label}
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
-
 function HuntCard({ hunt, onView }) {
   return (
     <motion.div
@@ -424,7 +337,6 @@ export default function SouvenirHuntWebsite() {
   const aboutRef = useRef(null);
   const artistsRef = useRef(null);
   const reviewsRef = useRef(null);
-  const partnersRef = useRef(null);
   const contactPreviewRef = useRef(null);
 
   const [page, setPage] = useState(getInitialPage);
@@ -748,8 +660,8 @@ export default function SouvenirHuntWebsite() {
             <div className="absolute inset-0 bg-gradient-to-br from-brand-50/70 via-white to-sky-50/70" />
             <div className="absolute -left-12 top-14 h-40 w-40 rounded-full bg-brand-200/35 blur-3xl sm:h-52 sm:w-52" />
             <div className="absolute bottom-0 right-0 h-56 w-56 rounded-full bg-sky-200/30 blur-3xl sm:h-64 sm:w-64" />
-            <div className="relative grid items-start gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-14">
-              <div className="flex max-w-xl flex-col justify-center">
+            <div className="relative">
+              <div className="mx-auto flex max-w-xl flex-col justify-center">
                 <motion.div
                   initial={{ opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -791,50 +703,9 @@ export default function SouvenirHuntWebsite() {
                       </button>
                     </div>
 
-                    <div className="mt-8 grid gap-3 sm:grid-cols-3">
-                      {[
-                        [MapPin, "Real locations"],
-                        [Compass, "Story-driven"],
-                        [Sparkles, "Physical reward"],
-                      ].map(([Icon, label]) => (
-                        <div
-                          key={label}
-                          className="flex items-center gap-3 rounded-[22px] border border-brand-100/70 bg-white/82 px-4 py-3 text-sm font-medium text-slate-700 shadow-sm"
-                        >
-                          <div className="flex h-8 w-8 items-center justify-center rounded-2xl bg-brand-50 text-brand-700">
-                            <Icon className="h-4 w-4" />
-                          </div>
-                          <span>{label}</span>
-                        </div>
-                      ))}
-                    </div>
                   </div>
                 </motion.div>
               </div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.65, delay: 0.1 }}
-                className="relative mx-auto w-full max-w-xl lg:max-w-none"
-              >
-                <div className="absolute inset-x-10 top-10 h-44 rounded-full bg-brand-200/25 blur-3xl" />
-                <div className="absolute -left-4 top-16 hidden rounded-[26px] border border-white/60 bg-white/85 px-4 py-3 shadow-sm backdrop-blur lg:block">
-                  <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-brand-700">
-                    Featured Hunt
-                  </div>
-                  <div className="mt-1 text-sm font-medium text-slate-700">The Emperor&apos;s Secret</div>
-                </div>
-                <div className="absolute -bottom-5 right-5 hidden rounded-[26px] border border-white/60 bg-white/88 px-5 py-4 shadow-sm backdrop-blur lg:block">
-                  <div className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">
-                    Instant Access
-                  </div>
-                  <div className="mt-1 text-sm font-medium text-slate-700">Buy online. Start when ready.</div>
-                </div>
-                <div className="relative">
-                  <TreasureMapCard />
-                </div>
-              </motion.div>
             </div>
           </div>
         </div>
@@ -868,48 +739,6 @@ export default function SouvenirHuntWebsite() {
               </div>
             </div>
 
-            <div className="grid gap-4 sm:grid-cols-2 sm:grid-rows-[auto_auto] lg:grid-cols-1 lg:grid-rows-none">
-              {[
-                [
-                  MapPin,
-                  "Explore real places",
-                  "Walk through meaningful locations instead of following another generic tour route.",
-                ],
-                [
-                  Search,
-                  "Solve the story",
-                  "Each clue unlocks a chapter that reveals the city in a more memorable way.",
-                ],
-                [
-                  Sparkles,
-                  "Take something real",
-                  "Finish with a physical souvenir tied to the journey you completed.",
-                ],
-              ].map(([Icon, title, text], index) => (
-                <div
-                  key={title}
-                  className={`rounded-[30px] border p-6 shadow-sm sm:p-7 ${
-                    index === 1
-                      ? "border-brand-200 bg-gradient-to-br from-brand-600 via-brand-600 to-brand-700 text-white shadow-[0_20px_55px_rgba(10,108,255,0.18)]"
-                      : "border-brand-100/80 bg-white/95"
-                  }`}
-                >
-                  <div
-                    className={`flex h-12 w-12 items-center justify-center rounded-[18px] ${
-                      index === 1 ? "bg-white/15 text-white" : "bg-brand-50 text-brand-700"
-                    }`}
-                  >
-                    <Icon className="h-5 w-5" />
-                  </div>
-                  <h3 className={`mt-6 text-xl font-semibold tracking-tight ${index === 1 ? "text-white" : "text-slate-950"}`}>
-                    {title}
-                  </h3>
-                  <p className={`mt-3 text-sm leading-7 ${index === 1 ? "text-blue-50/90" : "text-slate-600"}`}>
-                    {text}
-                  </p>
-                </div>
-              ))}
-            </div>
           </div>
         </div>
       </motion.section>
@@ -942,36 +771,6 @@ export default function SouvenirHuntWebsite() {
               </p>
             </div>
 
-            <div className="grid gap-5 md:grid-cols-3">
-              {[
-                [
-                  Compass,
-                  "Storytelling",
-                  "Narratives shaped by people who know how to turn a city into something worth discovering.",
-                ],
-                [
-                  Search,
-                  "Puzzle Design",
-                  "Clues built with intention so the experience feels rewarding, not random.",
-                ],
-                [
-                  Sparkles,
-                  "Souvenir Craft",
-                  "Physical rewards created to feel local, memorable, and worth keeping.",
-                ],
-              ].map(([Icon, title, text]) => (
-                <div
-                  key={title}
-                  className="rounded-[30px] border border-brand-100/80 bg-white/95 p-7 shadow-sm transition hover:-translate-y-1 hover:shadow-card"
-                >
-                  <div className="flex h-14 w-14 items-center justify-center rounded-[20px] bg-gradient-to-b from-brand-50 to-white text-brand-700 shadow-sm">
-                    <Icon className="h-6 w-6" />
-                  </div>
-                  <h3 className="mt-6 text-xl font-semibold tracking-tight text-slate-950">{title}</h3>
-                  <p className="mt-4 text-sm leading-7 text-slate-600">{text}</p>
-                </div>
-              ))}
-            </div>
           </div>
         </div>
       </motion.section>
@@ -1003,35 +802,6 @@ export default function SouvenirHuntWebsite() {
                 </div>
               </motion.div>
             ))}
-          </div>
-        </div>
-      </motion.section>
-
-      <motion.section ref={partnersRef} {...sectionFade} className="scroll-mt-28 overflow-hidden border-y border-brand-100 bg-white py-16">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="max-w-2xl">
-            <div className="text-sm font-semibold uppercase tracking-[0.25em] text-brand-700">Partners</div>
-            <h2 className="mt-4 text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">
-              Trusted by local culture, maker, and city partners.
-            </h2>
-            <p className="mt-4 text-base leading-8 text-slate-600">
-              We collaborate with the people and places that make each route feel rooted, credible, and worth recommending.
-            </p>
-          </div>
-          <div className="relative mt-10 overflow-hidden">
-            <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-white via-white/95 to-transparent sm:w-24" />
-            <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-white via-white/95 to-transparent sm:w-24" />
-            <motion.div
-              animate={{ x: [0, -600] }}
-              transition={{ duration: 24, ease: "linear", repeat: Infinity }}
-              className="flex min-w-max gap-4"
-            >
-              {[...partners, ...partners, ...partners].map((partner, index) => (
-                <div key={`${partner}-${index}`} className="rounded-full border border-brand-100 bg-brand-50/70 px-6 py-3 text-sm font-medium text-slate-600">
-                  {partner}
-                </div>
-              ))}
-            </motion.div>
           </div>
         </div>
       </motion.section>
@@ -1314,45 +1084,6 @@ export default function SouvenirHuntWebsite() {
               </button>
               {feedback ? <div className="text-sm text-slate-500">{feedback}</div> : null}
             </div>
-          </div>
-          <div className="rounded-[34px] border border-brand-100/80 bg-white/95 p-6 shadow-sm sm:p-8">
-            <div className="text-xl font-semibold text-slate-950">Active hunt status</div>
-            {purchase ? (
-              <div className="mt-6 space-y-4">
-                <div className="rounded-[28px] bg-brand-50/60 p-5">
-                  <div className="text-sm text-slate-500">Hunt</div>
-                  <div className="mt-1 text-xl font-semibold text-slate-950">{purchase.huntTitle}</div>
-                </div>
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <div className="rounded-[24px] border border-brand-100 p-4">
-                    <div className="text-sm text-slate-500">Code</div>
-                    <div className="mt-1 font-semibold tracking-[0.18em] text-slate-950">{purchase.code}</div>
-                  </div>
-                  <div className="rounded-[24px] border border-brand-100 p-4">
-                    <div className="text-sm text-slate-500">Status</div>
-                    <div className="mt-1 font-semibold text-slate-950">
-                      {purchase.collected ? "Collected" : isPurchaseActive ? formatTimeLeft(purchase.expiresAt) : "Expired"}
-                    </div>
-                  </div>
-                </div>
-                <div className="rounded-[24px] border border-brand-100 p-4">
-                  <div className="text-sm text-slate-500">Progress</div>
-                  <div className="mt-1 font-semibold text-slate-950">
-                    Step {Math.min(unlockedStep + 1, demoSteps.length)} of {demoSteps.length}
-                  </div>
-                </div>
-                {isPurchaseActive ? (
-                  <button onClick={() => navigate("play")} className="flex w-full items-center justify-center gap-2 rounded-full bg-brand-600 px-6 py-3 text-sm font-medium text-white transition hover:bg-brand-700">
-                    Continue Playing
-                    <Play className="h-4 w-4" />
-                  </button>
-                ) : null}
-              </div>
-            ) : (
-              <div className="mt-6 rounded-[28px] bg-brand-50/50 p-5 text-sm leading-6 text-slate-600">
-                No active hunt yet. Buy one first. Without a purchase, there is nothing to resume.
-              </div>
-            )}
           </div>
         </div>
       </div>
@@ -1648,10 +1379,6 @@ export default function SouvenirHuntWebsite() {
                       <span>Reviews</span>
                       <ChevronRight className="h-4 w-4 text-brand-600" />
                     </button>
-                    <button onClick={() => scrollToSection(partnersRef)} className="flex items-center justify-between rounded-2xl border border-transparent bg-white/70 px-4 py-3 text-left text-sm font-medium text-slate-700 transition hover:border-brand-100 hover:bg-white hover:text-slate-950">
-                      <span>Partners</span>
-                      <ChevronRight className="h-4 w-4 text-brand-600" />
-                    </button>
                     <button onClick={() => scrollToSection(contactPreviewRef)} className="flex items-center justify-between rounded-2xl border border-transparent bg-white/70 px-4 py-3 text-left text-sm font-medium text-slate-700 transition hover:border-brand-100 hover:bg-white hover:text-slate-950">
                       <span>Contact</span>
                       <ChevronRight className="h-4 w-4 text-brand-600" />
@@ -1707,24 +1434,6 @@ export default function SouvenirHuntWebsite() {
                 <button onClick={() => navigate("contact")} className="text-left transition hover:text-brand-700">
                   Contact
                 </button>
-              </div>
-            </div>
-
-            <div>
-              <div className="text-sm font-semibold uppercase tracking-[0.2em] text-brand-700">Destinations</div>
-              <div className="mt-4 grid gap-3 text-sm text-slate-600">
-                <button
-                  onClick={() => {
-                    setSelectedHunt(countries[0].cities[0].hunts[0]);
-                    navigate("hunt-details");
-                  }}
-                  className="text-left transition hover:text-brand-700"
-                >
-                  Split, Croatia
-                </button>
-                <div>Greece - Coming Soon</div>
-                <div>Italy - Coming Soon</div>
-                <div>Spain - Coming Soon</div>
               </div>
             </div>
 
