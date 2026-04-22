@@ -35,8 +35,8 @@ const answerLimiter = rateLimit({
 
 app.use(
   cors({
-    origin: config.corsOrigin,
-    credentials: true,
+    origin: true,
+    credentials: false,
   }),
 );
 
