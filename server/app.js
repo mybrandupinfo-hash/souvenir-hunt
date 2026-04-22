@@ -45,27 +45,45 @@ async function ensureDemoPickupSession(code) {
     return session;
   }
 
-  const createdAt = new Date();
-  const expiresAt = new Date(createdAt.getTime() + 24 * 60 * 60 * 1000);
-  const accessKey = await generateUniqueAccessKey();
-  const qrCodeDataUrl = await createQrCodeDataUrl(
-    `${config.publicBaseUrl}/redeem?code=${normalizedCode}`,
-  );
+  try {
+    const createdAt = new Date();
+    const expiresAt = new Date(createdAt.getTime() + 24 * 60 * 60 * 1000);
+    const accessKey = await generateUniqueAccessKey();
 
-  session = await GameSession.create({
-    email: "demo@souvenirhunt.com",
-    access_key: accessKey,
-    current_slide: slides.length - 1,
-    completed_slides: slides.map((slide) => slide.index),
-    is_completed: true,
-    pickup_code: normalizedCode,
-    pickup_qr_data_url: qrCodeDataUrl,
-    pickup_used: false,
-    hunt_name: `${config.huntName} Demo`,
-    expires_at: expiresAt,
-  });
+    session = await GameSession.findOneAndUpdate(
+      { pickup_code: normalizedCode },
+      {
+        $setOnInsert: {
+          email: "demo@souvenirhunt.com",
+          access_key: accessKey,
+          current_slide: slides.length - 1,
+          completed_slides: slides.map((slide) => slide.index),
+          is_completed: true,
+          pickup_code: normalizedCode,
+          pickup_used: false,
+          hunt_name: `${config.huntName} Demo`,
+          expires_at: expiresAt,
+        },
+      },
+      {
+        new: true,
+        upsert: true,
+      },
+    );
 
-  return session;
+    if (session && !session.pickup_qr_data_url) {
+      const qrCodeDataUrl = await createQrCodeDataUrl(
+        `${config.publicBaseUrl}/redeem?code=${normalizedCode}`,
+      );
+      session.pickup_qr_data_url = qrCodeDataUrl;
+      await session.save();
+    }
+
+    return session;
+  } catch (error) {
+    console.error("Unable to ensure demo pickup session:", error);
+    return GameSession.findOne({ pickup_code: normalizedCode });
+  }
 }
 
 app.use(
@@ -395,97 +413,110 @@ app.get("/slide/:index", (request, response) => {
 });
 
 app.get("/redeem-status", async (request, response) => {
-  const code = String(request.query.code || "").trim();
-  if (!code) {
-    return response.status(400).json({ status: "invalid", message: "Pickup code is required." });
-  }
+  try {
+    const code = String(request.query.code || "").trim();
+    if (!code) {
+      return response.status(400).json({ status: "invalid", message: "Pickup code is required." });
+    }
 
-  let session = await GameSession.findOne({ pickup_code: code });
-  if (!session && isDemoPickupCode(code)) {
-    session = await ensureDemoPickupSession(code);
-  }
+    let session = await GameSession.findOne({ pickup_code: code });
+    if (!session && isDemoPickupCode(code)) {
+      session = await ensureDemoPickupSession(code);
+    }
 
-  if (!session) {
-    return response.status(404).json({ status: "invalid", message: "Pickup code not found." });
-  }
+    if (!session) {
+      return response.status(404).json({ status: "invalid", message: "Pickup code not found." });
+    }
 
-  if (isSessionExpired(session)) {
-    return response.json({ status: "expired", message: "This pickup code has expired." });
-  }
+    if (isSessionExpired(session)) {
+      return response.json({ status: "expired", message: "This pickup code has expired." });
+    }
 
-  if (!session.is_completed) {
-    return response.json({
-      status: "not-completed",
-      message: "The game has not been completed yet.",
+    if (!session.is_completed) {
+      return response.json({
+        status: "not-completed",
+        message: "The game has not been completed yet.",
+      });
+    }
+
+    if (session.pickup_used) {
+      return response.json({ status: "used", message: "This pickup has already been redeemed." });
+    }
+
+    return response.json({ status: "valid", message: "This pickup is ready to confirm." });
+  } catch (error) {
+    console.error("Redeem status error:", error);
+    return response.status(500).json({
+      status: "error",
+      message: "Unable to verify this pickup code right now.",
     });
   }
-
-  if (session.pickup_used) {
-    return response.json({ status: "used", message: "This pickup has already been redeemed." });
-  }
-
-  return response.json({ status: "valid", message: "This pickup is ready to confirm." });
 });
 
 app.post("/redeem", async (request, response) => {
-  const code = String(request.body.code || "").trim();
-  const staffPin = String(request.body.staff_pin || "").trim();
+  try {
+    const code = String(request.body.code || "").trim();
+    const staffPin = String(request.body.staff_pin || "").trim();
 
-  if (!code || !staffPin) {
-    return response.status(400).json({ message: "Code and staff PIN are required." });
+    if (!code || !staffPin) {
+      return response.status(400).json({ message: "Code and staff PIN are required." });
+    }
+
+    if (staffPin !== config.staffPin) {
+      return response.status(401).json({ message: "Invalid staff PIN." });
+    }
+
+    let session = await GameSession.findOne({ pickup_code: code });
+    if (!session && isDemoPickupCode(code)) {
+      session = await ensureDemoPickupSession(code);
+    }
+
+    if (!session) {
+      return response.status(404).json({ message: "Pickup code not found." });
+    }
+
+    if (isSessionExpired(session)) {
+      return response.status(410).json({ message: "This session has expired." });
+    }
+
+    if (!session.is_completed) {
+      return response.status(400).json({ message: "The game is not completed yet." });
+    }
+
+    if (session.pickup_used) {
+      return response.status(409).json({ message: "This pickup has already been redeemed." });
+    }
+
+    const redeemedSession = await GameSession.findOneAndUpdate(
+      {
+        _id: session._id,
+        pickup_used: false,
+      },
+      {
+        pickup_used: true,
+        redeemed_at: new Date(),
+      },
+      {
+        new: true,
+      },
+    );
+
+    if (!redeemedSession) {
+      return response.status(409).json({ message: "This pickup has already been redeemed." });
+    }
+
+    console.log(
+      `[redeem] pickup confirmed for ${redeemedSession.email} at ${redeemedSession.redeemed_at?.toISOString()}`,
+    );
+
+    return response.json({
+      success: true,
+      message: "Pickup confirmed successfully.",
+    });
+  } catch (error) {
+    console.error("Redeem confirm error:", error);
+    return response.status(500).json({ message: "Unable to confirm this pickup right now." });
   }
-
-  if (staffPin !== config.staffPin) {
-    return response.status(401).json({ message: "Invalid staff PIN." });
-  }
-
-  let session = await GameSession.findOne({ pickup_code: code });
-  if (!session && isDemoPickupCode(code)) {
-    session = await ensureDemoPickupSession(code);
-  }
-
-  if (!session) {
-    return response.status(404).json({ message: "Pickup code not found." });
-  }
-
-  if (isSessionExpired(session)) {
-    return response.status(410).json({ message: "This session has expired." });
-  }
-
-  if (!session.is_completed) {
-    return response.status(400).json({ message: "The game is not completed yet." });
-  }
-
-  if (session.pickup_used) {
-    return response.status(409).json({ message: "This pickup has already been redeemed." });
-  }
-
-  const redeemedSession = await GameSession.findOneAndUpdate(
-    {
-      _id: session._id,
-      pickup_used: false,
-    },
-    {
-      pickup_used: true,
-      redeemed_at: new Date(),
-    },
-    {
-      new: true,
-    },
-  );
-
-  if (!redeemedSession) {
-    return response.status(409).json({ message: "This pickup has already been redeemed." });
-  }
-
-  console.log(
-    `[redeem] pickup confirmed for ${redeemedSession.email} at ${redeemedSession.redeemed_at?.toISOString()}`,
-  );
-
-  return response.json({
-    success: true,
-    message: "Pickup confirmed successfully.",
-  });
 });
 
 setInterval(async () => {
