@@ -142,7 +142,6 @@ app.post(
             current_slide: 0,
             completed_slides: [],
             is_completed: false,
-            pickup_code: null,
             pickup_used: false,
             stripe_checkout_session_id: checkoutSession.id,
             hunt_name: checkoutSession.metadata?.huntName || config.huntName,
@@ -242,7 +241,6 @@ app.post("/dev/create-test-session", async (request, response) => {
       completed_slides:
         mode === "completed" ? slides.map((slide) => slide.index) : [],
       is_completed: mode === "completed",
-      pickup_code: null,
       pickup_used: false,
       hunt_name: config.huntName,
       expires_at: expiresAt,

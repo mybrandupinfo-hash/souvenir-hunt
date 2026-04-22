@@ -31,7 +31,7 @@ const gameSessionSchema = new mongoose.Schema(
       type: String,
       unique: true,
       sparse: true,
-      default: null,
+      default: undefined,
     },
     pickup_qr_data_url: {
       type: String,
@@ -45,7 +45,7 @@ const gameSessionSchema = new mongoose.Schema(
       type: String,
       unique: true,
       sparse: true,
-      default: null,
+      default: undefined,
     },
     hunt_name: {
       type: String,
