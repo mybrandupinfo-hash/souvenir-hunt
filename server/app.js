@@ -33,6 +33,41 @@ const answerLimiter = rateLimit({
   },
 });
 
+function isDemoPickupCode(code) {
+  return /^PK-DEMO-[A-Z0-9-]+$/.test(String(code || "").trim().toUpperCase());
+}
+
+async function ensureDemoPickupSession(code) {
+  const normalizedCode = String(code || "").trim().toUpperCase();
+  let session = await GameSession.findOne({ pickup_code: normalizedCode });
+
+  if (session) {
+    return session;
+  }
+
+  const createdAt = new Date();
+  const expiresAt = new Date(createdAt.getTime() + 24 * 60 * 60 * 1000);
+  const accessKey = await generateUniqueAccessKey();
+  const qrCodeDataUrl = await createQrCodeDataUrl(
+    `${config.publicBaseUrl}/redeem?code=${normalizedCode}`,
+  );
+
+  session = await GameSession.create({
+    email: "demo@souvenirhunt.com",
+    access_key: accessKey,
+    current_slide: slides.length - 1,
+    completed_slides: slides.map((slide) => slide.index),
+    is_completed: true,
+    pickup_code: normalizedCode,
+    pickup_qr_data_url: qrCodeDataUrl,
+    pickup_used: false,
+    hunt_name: `${config.huntName} Demo`,
+    expires_at: expiresAt,
+  });
+
+  return session;
+}
+
 app.use(
   cors({
     origin: true,
@@ -365,7 +400,11 @@ app.get("/redeem-status", async (request, response) => {
     return response.status(400).json({ status: "invalid", message: "Pickup code is required." });
   }
 
-  const session = await GameSession.findOne({ pickup_code: code });
+  let session = await GameSession.findOne({ pickup_code: code });
+  if (!session && isDemoPickupCode(code)) {
+    session = await ensureDemoPickupSession(code);
+  }
+
   if (!session) {
     return response.status(404).json({ status: "invalid", message: "Pickup code not found." });
   }
@@ -400,7 +439,11 @@ app.post("/redeem", async (request, response) => {
     return response.status(401).json({ message: "Invalid staff PIN." });
   }
 
-  const session = await GameSession.findOne({ pickup_code: code });
+  let session = await GameSession.findOne({ pickup_code: code });
+  if (!session && isDemoPickupCode(code)) {
+    session = await ensureDemoPickupSession(code);
+  }
+
   if (!session) {
     return response.status(404).json({ message: "Pickup code not found." });
   }

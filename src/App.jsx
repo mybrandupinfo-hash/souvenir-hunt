@@ -695,7 +695,7 @@ export default function SouvenirHuntWebsite() {
         console.error("Unable to create backend pickup session:", error);
 
         if (canUseLocalPickupFallback()) {
-          const pickupCode = `PK-${generateCode().replace("SH-", "")}`;
+          const pickupCode = `PK-DEMO-${generateCode().replace("SH-", "")}`;
           const pickupAssets = await createPickupAssets(pickupCode);
 
           setPurchase((prev) =>
