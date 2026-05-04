@@ -173,6 +173,107 @@ const sectionFade = {
   transition: { duration: 0.6 },
 };
 
+const playStepDetails = [
+  {
+    cardTitle: "STEP 1: Stone Giant",
+    storyIntro:
+      "Every path begins with something larger than it first appears. A figure in bronze, polished by habit and hope, becomes the first sign that this city remembers more than it tells.",
+    storyBody: [
+      "People pass it every day, touching the same place without always knowing why. That is how memory survives here, not in museums alone, but in gestures repeated until they become tradition.",
+      "Before palaces, gates, and ceremonies, there is the quiet moment of noticing. The hunt starts when you begin to look at the city the way it looks back at you.",
+    ],
+    history:
+      "The opening clue introduces Split as a place where history lives in public ritual. Bronze, statues, and repeated gestures become part of how the city carries memory forward.",
+    guide:
+      "Start calmly. Read the clue once, then scan the space around you for a landmark that locals and visitors interact with instinctively.",
+    image: "/hunts/emperors-secret.svg",
+  },
+  {
+    cardTitle: "STEP 2: Iron Gate",
+    storyIntro:
+      "At first, nothing seemed wrong. That is how these things begin, not with war, not with betrayal, but with small shifts. The kind you would not notice unless you were looking for them.",
+    storyBody: [
+      "And Diocletian was always looking. One ruler began to gather more soldiers than he needed. Another delayed decisions, not out of caution, but calculation.",
+      "Letters between them became colder. More careful. Words chosen not for truth, but for advantage. Even stone gates can feel the moment when trust starts to close.",
+    ],
+    history:
+      "Roman city gates were more than entries; they announced hierarchy, protection, and control. The northern gate of Diocletian's Palace framed the edge between imperial order and the outer world.",
+    guide:
+      "Stand still for a moment and take in the full structure. Look for names, materials, and symbols that feel obvious only after you pause long enough to notice them.",
+    image: "/hunts/emperors-secret.svg",
+  },
+  {
+    cardTitle: "STEP 3: Emperors Path",
+    storyIntro:
+      "A straight line through stone can feel innocent, but power loves a clear route. The Emperor's path was never only a street; it was a statement about movement, vision, and control.",
+    storyBody: [
+      "To walk it now is to inherit that geometry. Walls narrow your attention. Shadows guide your pace. What once directed officials and guards now directs curious players and slow-moving tourists.",
+      "The clue is not only where to go next. It is how the city still teaches you to move through it.",
+    ],
+    history:
+      "The cardo was a defining axis in Roman urban planning. In Split, this route still shapes how people cross the palace and understand its spatial order.",
+    guide:
+      "Follow the most natural north-south line and trust the structure around you. Roman planning often feels logical once you stop resisting it.",
+    image: "/hunts/emperors-secret.svg",
+  },
+  {
+    cardTitle: "STEP 4: Court of Echoes",
+    storyIntro:
+      "Ceremonial spaces are designed to magnify presence. Every sound feels chosen. Every stone seems placed to turn a ruler into something larger than human scale.",
+    storyBody: [
+      "But monuments outlive the people who commission them. What remains are the traces: columns, polished steps, and old creatures imported from older worlds.",
+      "Some clues are hidden in decoration because power always liked to surround itself with symbols that seemed eternal.",
+    ],
+    history:
+      "The Peristyle was the ceremonial heart of Diocletian's Palace. Imported Egyptian sphinxes connected Roman authority to even older imperial traditions.",
+    guide:
+      "Let your eyes travel upward and outward. In ceremonial areas, the answer is often visible from a distance before it feels understandable up close.",
+    image: "/hunts/emperors-secret.svg",
+  },
+  {
+    cardTitle: "STEP 5: Beneath the Palace",
+    storyIntro:
+      "Below every polished residence lies the machinery that made the surface possible. Storage, service, secrecy. The rooms beneath the palace hold the weight of everything above them.",
+    storyBody: [
+      "It is cooler here, more patient. Sound changes. Time feels slower. Hidden places rarely shout their purpose; they reveal it through atmosphere.",
+      "By this point, the hunt should feel different from a walk. You are no longer passing through the city. You are descending into it.",
+    ],
+    history:
+      "The substructures beneath Diocletian's apartments preserved the palace plan and supported life above. Today they are among the clearest surviving architectural records of the complex.",
+    guide:
+      "Look for what is structural rather than decorative. Underground clues often reward attention to function instead of ornament.",
+    image: "/hunts/emperors-secret.svg",
+  },
+  {
+    cardTitle: "STEP 6: Toward the Sea",
+    storyIntro:
+      "Eventually every imperial story meets the open air. Salt changes the mood of the hunt. The city loosens. What was enclosed becomes public again.",
+    storyBody: [
+      "Now the route widens. Cafes, palms, and voices take over. The final movement is not quieter, only broader, as if the city has decided to reveal itself at last.",
+      "Some endings do not feel like conclusions. They feel like release.",
+    ],
+    history:
+      "Split's waterfront became the city's outward face, reshaping how the old palace connected to trade, leisure, and everyday life.",
+    guide:
+      "Notice the shift in atmosphere. When the city suddenly opens, the clue usually points to the place everyone recognizes by feel before name.",
+    image: "/hunts/emperors-secret.svg",
+  },
+  {
+    cardTitle: "STEP 7: Hidden Reward",
+    storyIntro:
+      "The last answer is not hidden in architecture. It waits at the edge of the experience, where the route becomes something you can hold rather than only remember.",
+    storyBody: [
+      "By now the city has done its work. It has slowed you down, sharpened your eye, and turned a simple walk into a story with weight.",
+      "The reward matters because it closes the loop. Memory becomes object. Discovery becomes proof.",
+    ],
+    history:
+      "Souvenir culture often reduces place into something generic. This ending is meant to do the opposite and tie the object back to the journey itself.",
+    guide:
+      "This final clue only resolves once pickup is complete. If you are at the end, check every detail you have collected and be ready to confirm the reward word.",
+    image: "/hunts/emperors-secret.svg",
+  },
+];
+
 const FRONTEND_ROUTES = new Set([
   "/",
   "/hunts",
@@ -352,6 +453,7 @@ export default function SouvenirHuntWebsite() {
   const [feedback, setFeedback] = useState("");
   const [openHint, setOpenHint] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [activePlayTab, setActivePlayTab] = useState("story");
   const [clockTick, setClockTick] = useState(Date.now());
 
   useEffect(() => {
@@ -477,6 +579,10 @@ export default function SouvenirHuntWebsite() {
       setPurchase(null);
     }
   }, [isPurchaseExpired, purchase, setPurchase]);
+
+  useEffect(() => {
+    setActivePlayTab("story");
+  }, [activeStep]);
 
   useEffect(() => {
     let cancelled = false;
@@ -1267,93 +1373,238 @@ export default function SouvenirHuntWebsite() {
     }
 
     const current = demoSteps[activeStep];
+    const currentDetail = playStepDetails[activeStep] || playStepDetails[0];
     const progress = ((activeStep + 1) / demoSteps.length) * 100;
+    const tabContent = {
+      story: {
+        intro: currentDetail.storyIntro,
+        body: currentDetail.storyBody,
+      },
+      history: {
+        intro: currentDetail.history,
+        body: [
+          "Each location in the hunt is chosen because it reveals how politics, ritual, and architecture shaped the city over time.",
+        ],
+      },
+      guide: {
+        intro: currentDetail.guide,
+        body: [
+          "Slow down, scan the surroundings, and trust what feels deliberately placed. The hunt rewards careful observation more than speed.",
+        ],
+      },
+    };
+    const activeTabContent = tabContent[activePlayTab];
 
     return (
-      <section className="px-4 py-8 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-5xl">
-          <div className="rounded-[34px] border border-brand-100/80 bg-white/95 p-5 shadow-sm sm:p-8">
-            <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
-              <div>
-                <div className="text-sm font-semibold uppercase tracking-[0.25em] text-brand-700">Live Hunt</div>
-                <h1 className="mt-2 text-3xl font-semibold tracking-tight text-slate-950">The Emperor&apos;s Secret</h1>
-                <div className="mt-2 text-sm text-slate-500">Code {purchase.code} | {formatTimeLeft(purchase.expiresAt)}</div>
-              </div>
-              <div className="min-w-[180px]">
-                <div className="mb-2 flex items-center justify-between text-xs font-medium uppercase tracking-[0.18em] text-slate-400">
-                  <span>Progress</span>
-                  <span>{activeStep + 1}/{demoSteps.length}</span>
-                </div>
-                <div className="h-2 rounded-full bg-slate-100">
-                  <div className="h-2 rounded-full bg-brand-600 transition-all" style={{ width: `${progress}%` }} />
-                </div>
-              </div>
-            </div>
-            <div className="mt-8 flex gap-2 overflow-x-auto pb-2">
-              {demoSteps.map((step, index) => {
-                const unlocked = index <= unlockedStep;
-                const isActive = index === activeStep;
-                return (
-                  <button
-                    key={step.title}
-                    disabled={!unlocked}
-                    onClick={() => unlocked && setActiveStep(index)}
-                    className={`whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium transition ${
-                      isActive
-                        ? "bg-brand-600 text-white"
-                        : unlocked
-                        ? "bg-brand-50 text-slate-700 hover:bg-brand-100 hover:text-brand-700"
-                        : "cursor-not-allowed bg-slate-50 text-slate-300"
-                    }`}
-                  >
-                    Step {index + 1}
-                  </button>
-                );
-              })}
-            </div>
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeStep}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -12 }}
-                transition={{ duration: 0.25 }}
-                className="mt-8 grid gap-6 lg:grid-cols-[0.9fr_1.1fr]"
-              >
-                <div className="rounded-[30px] bg-brand-50/60 p-6">
-                  <div className="text-sm font-semibold uppercase tracking-[0.22em] text-brand-700">Step {activeStep + 1}</div>
-                  <h2 className="mt-3 text-2xl font-semibold tracking-tight text-slate-950">{current.title}</h2>
-                  <p className="mt-4 text-sm leading-7 text-slate-600">{current.story}</p>
-                </div>
-                <div className="rounded-[30px] border border-brand-100/80 p-6">
-                  <div className="text-sm font-semibold uppercase tracking-[0.22em] text-brand-700">Clue</div>
-                  <p className="mt-3 text-base leading-7 text-slate-700">{current.clue}</p>
-                  <input
-                    value={answers[activeStep] || ""}
-                    onChange={(event) => setAnswers({ ...answers, [activeStep]: event.target.value })}
-                    placeholder="Type your answer"
-                    className="mt-6 w-full rounded-2xl border border-brand-100 px-4 py-3 outline-none focus:border-brand-300"
-                  />
-                  <div className="mt-4 flex flex-col gap-3 sm:flex-row">
-                    <button onClick={submitAnswer} className="inline-flex items-center justify-center gap-2 rounded-full bg-brand-600 px-5 py-3 text-sm font-medium text-white transition hover:bg-brand-700">
-                      Submit
-                      <CheckCircle2 className="h-4 w-4" />
-                    </button>
-                    <button
-                      onClick={() => setOpenHint(openHint === activeStep ? null : activeStep)}
-                      className="inline-flex items-center justify-center gap-2 rounded-full border border-brand-100 bg-white px-5 py-3 text-sm font-medium text-slate-700 transition hover:border-brand-200 hover:text-brand-700"
+      <section className="bg-white px-3 py-6 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-[390px]">
+          <div className="relative overflow-hidden rounded-[44px] border border-slate-900/85 bg-white px-4 pb-6 pt-4 shadow-[0_28px_90px_rgba(15,23,42,0.12)] sm:px-5">
+            <div
+              className="absolute inset-0 opacity-60"
+              style={{
+                backgroundImage:
+                  "radial-gradient(circle, rgba(68,129,255,0.12) 1px, transparent 1px)",
+                backgroundSize: "12px 12px",
+              }}
+            />
+            <div className="absolute inset-x-0 top-0 h-40 bg-[radial-gradient(circle_at_top,rgba(120,176,255,0.22),transparent_70%)]" />
+
+            <div className="relative">
+              <div className="rounded-full bg-white px-4 py-3 shadow-[0_16px_44px_rgba(75,138,255,0.18)] ring-1 ring-brand-100/80">
+                <div className="flex items-center justify-between gap-3">
+                  <div className="flex min-w-0 items-center gap-3">
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-brand-600 text-white shadow-[0_14px_28px_rgba(10,108,255,0.24)]">
+                      <Compass className="h-5 w-5" />
+                    </div>
+                    <span
+                      className="truncate text-lg font-bold tracking-tight text-brand-600"
+                      style={{ fontFamily: '"Poppins", sans-serif' }}
                     >
-                      Hint
-                      <Sparkles className="h-4 w-4" />
-                    </button>
+                      Souvenir Hunt
+                    </span>
                   </div>
-                  {openHint === activeStep ? (
-                    <div className="mt-4 rounded-2xl bg-brand-50 p-4 text-sm leading-6 text-brand-800">{current.hint}</div>
-                  ) : null}
-                  {feedback ? <div className="mt-4 text-sm text-slate-500">{feedback}</div> : null}
+                  <button
+                    onClick={() => setMobileMenuOpen((prev) => !prev)}
+                    className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-brand-600 text-white shadow-[0_14px_28px_rgba(10,108,255,0.24)] transition hover:bg-brand-700"
+                    aria-label="Toggle menu"
+                    aria-expanded={mobileMenuOpen}
+                  >
+                    <span className="relative flex h-4 w-4 items-center justify-center">
+                      <motion.span
+                        animate={mobileMenuOpen ? { rotate: 45, y: 0 } : { rotate: 0, y: -4 }}
+                        transition={{ duration: 0.18 }}
+                        className="absolute h-[2px] w-4 rounded-full bg-white"
+                      />
+                      <motion.span
+                        animate={mobileMenuOpen ? { opacity: 0 } : { opacity: 1 }}
+                        transition={{ duration: 0.14 }}
+                        className="absolute h-[2px] w-4 rounded-full bg-white"
+                      />
+                      <motion.span
+                        animate={mobileMenuOpen ? { rotate: -45, y: 0 } : { rotate: 0, y: 4 }}
+                        transition={{ duration: 0.18 }}
+                        className="absolute h-[2px] w-4 rounded-full bg-white"
+                      />
+                    </span>
+                  </button>
                 </div>
-              </motion.div>
-            </AnimatePresence>
+              </div>
+
+              <AnimatePresence>
+                {mobileMenuOpen ? (
+                  <motion.div
+                    initial={{ opacity: 0, y: -8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -8 }}
+                    transition={{ duration: 0.18 }}
+                    className="mt-3 rounded-[26px] bg-white p-3 shadow-[0_14px_35px_rgba(15,23,42,0.08)] ring-1 ring-brand-100/80"
+                  >
+                    <div className="grid gap-2">
+                      <button onClick={() => navigate("home")} className="rounded-2xl px-4 py-3 text-left text-sm font-medium text-slate-700 transition hover:bg-brand-50 hover:text-brand-700">Home</button>
+                      <button onClick={() => navigate("hunts")} className="rounded-2xl px-4 py-3 text-left text-sm font-medium text-slate-700 transition hover:bg-brand-50 hover:text-brand-700">Hunts</button>
+                      <button onClick={() => navigate("your-hunt")} className="rounded-2xl px-4 py-3 text-left text-sm font-medium text-slate-700 transition hover:bg-brand-50 hover:text-brand-700">Your Hunt</button>
+                      <button onClick={() => navigate("contact")} className="rounded-2xl px-4 py-3 text-left text-sm font-medium text-slate-700 transition hover:bg-brand-50 hover:text-brand-700">Contact</button>
+                    </div>
+                  </motion.div>
+                ) : null}
+              </AnimatePresence>
+
+              <div className="pt-8 text-center">
+                <div className="text-sm font-medium tracking-wide text-slate-500">Game ID: DVX78J3F</div>
+                <h1 className="mt-2 text-[2rem] font-extrabold leading-[1.02] tracking-[-0.05em] text-brand-600">
+                  The Emperors Secret
+                </h1>
+              </div>
+
+              <div className="mt-8">
+                <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
+                  Progress:
+                </div>
+                <div className="mt-2 h-4 overflow-hidden rounded-full border border-[#7458ff] bg-white shadow-[inset_0_1px_0_rgba(255,255,255,0.7)]">
+                  <div
+                    className="h-full rounded-full bg-gradient-to-r from-brand-600 via-[#5b4cff] to-[#a66dff] transition-all"
+                    style={{ width: `${progress}%` }}
+                  />
+                </div>
+
+                <div className="mt-4 overflow-x-auto pb-2">
+                  <div className="flex min-w-max gap-2">
+                    {demoSteps.map((step, index) => {
+                      const unlocked = index <= unlockedStep;
+                      const isActive = index === activeStep;
+                      return (
+                        <button
+                          key={step.title}
+                          disabled={!unlocked}
+                          onClick={() => unlocked && setActiveStep(index)}
+                          className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
+                            isActive
+                              ? "bg-[#2417c8] text-white shadow-[0_10px_24px_rgba(36,23,200,0.26)]"
+                              : unlocked
+                              ? "bg-[#8eb4ff] text-white hover:bg-[#7ea8ff]"
+                              : "bg-[#d8e4ff] text-white/80"
+                          }`}
+                        >
+                          Step {index + 1}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                <div className="mt-1 h-[3px] rounded-full bg-slate-300" />
+              </div>
+
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={`${activeStep}-${activePlayTab}`}
+                  initial={{ opacity: 0, y: 18 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -12 }}
+                  transition={{ duration: 0.25 }}
+                  className="mt-6 rounded-[32px] bg-[#b9d2ff] p-5 shadow-[0_20px_50px_rgba(92,145,255,0.18)]"
+                >
+                  <h2 className="text-[2rem] font-extrabold leading-none tracking-[-0.05em] text-[#2317c7]">
+                    {currentDetail.cardTitle}
+                  </h2>
+
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {[
+                      ["story", "Story"],
+                      ["history", "History"],
+                      ["guide", "Guide"],
+                    ].map(([id, label]) => (
+                      <button
+                        key={id}
+                        onClick={() => setActivePlayTab(id)}
+                        className={`rounded-full px-4 py-1.5 text-sm font-semibold transition ${
+                          activePlayTab === id
+                            ? "bg-[#2417c8] text-white"
+                            : "bg-[#7ea4f2] text-white hover:bg-[#7097ea]"
+                        }`}
+                      >
+                        {label}
+                      </button>
+                    ))}
+                  </div>
+
+                  <div className="mt-5 text-[1.08rem] leading-9 text-slate-950">
+                    <div className="flex items-start gap-4">
+                      <img
+                        src={currentDetail.image}
+                        alt={currentDetail.cardTitle}
+                        className="h-[150px] w-[110px] shrink-0 rounded-2xl object-cover shadow-[0_12px_25px_rgba(15,23,42,0.12)]"
+                      />
+                      <p className="font-serif text-[1.02rem] italic leading-9 text-slate-950">
+                        {activeTabContent.intro}
+                      </p>
+                    </div>
+                    <div className="mt-4 space-y-3 font-serif text-[1.02rem] italic leading-9 text-slate-950">
+                      {activeTabContent.body.map((paragraph) => (
+                        <p key={paragraph}>{paragraph}</p>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="mt-6 rounded-[26px] bg-white/72 p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.7)] ring-1 ring-white/70">
+                    <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-brand-600">
+                      Clue
+                    </div>
+                    <p className="mt-3 text-base leading-7 text-slate-800">{current.clue}</p>
+                    <input
+                      value={answers[activeStep] || ""}
+                      onChange={(event) => setAnswers({ ...answers, [activeStep]: event.target.value })}
+                      placeholder="Type your answer"
+                      className="mt-5 w-full rounded-full border border-brand-100 bg-white px-4 py-3 text-base outline-none transition focus:border-brand-300"
+                    />
+                    <div className="mt-4 flex flex-wrap gap-3">
+                      <button
+                        onClick={submitAnswer}
+                        className="inline-flex items-center justify-center gap-2 rounded-full bg-brand-600 px-5 py-3 text-sm font-semibold text-white shadow-[0_14px_28px_rgba(10,108,255,0.24)] transition hover:bg-brand-700"
+                      >
+                        Submit
+                        <CheckCircle2 className="h-4 w-4" />
+                      </button>
+                      <button
+                        onClick={() => setOpenHint(openHint === activeStep ? null : activeStep)}
+                        className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-semibold text-brand-700 ring-1 ring-brand-100 transition hover:bg-brand-50"
+                      >
+                        Hint
+                        <Sparkles className="h-4 w-4" />
+                      </button>
+                    </div>
+                    {openHint === activeStep ? (
+                      <div className="mt-4 rounded-[22px] bg-brand-50 p-4 text-sm leading-6 text-brand-800">
+                        {current.hint}
+                      </div>
+                    ) : null}
+                    {feedback ? (
+                      <div className="mt-4 text-sm leading-6 text-slate-600">{feedback}</div>
+                    ) : null}
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+            </div>
           </div>
         </div>
       </section>
@@ -1388,6 +1639,7 @@ export default function SouvenirHuntWebsite() {
 
   return (
     <div className="min-h-screen bg-transparent text-slate-900">
+      {page !== "play" ? (
       <header className="sticky top-0 z-50 py-4">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between rounded-full border border-brand-100 bg-white px-4 py-3 shadow-sm sm:px-6">
@@ -1488,6 +1740,7 @@ export default function SouvenirHuntWebsite() {
           </AnimatePresence>
         </div>
       </header>
+      ) : null}
 
       <main>
         {page === "home" && renderHome()}
