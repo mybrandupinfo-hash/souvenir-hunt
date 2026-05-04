@@ -1398,7 +1398,7 @@ export default function SouvenirHuntWebsite() {
     return (
       <section className="bg-white px-3 py-6 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-[390px]">
-          <div className="relative overflow-hidden rounded-[44px] border border-slate-900/85 bg-white px-4 pb-6 pt-4 shadow-[0_28px_90px_rgba(15,23,42,0.12)] sm:px-5">
+          <div className="relative overflow-hidden rounded-[44px] bg-white px-4 pb-6 pt-4 shadow-[0_28px_90px_rgba(15,23,42,0.08)] ring-1 ring-slate-200/80 sm:px-5">
             <div
               className="absolute inset-0 opacity-60"
               style={{
@@ -1410,7 +1410,7 @@ export default function SouvenirHuntWebsite() {
             <div className="absolute inset-x-0 top-0 h-40 bg-[radial-gradient(circle_at_top,rgba(120,176,255,0.22),transparent_70%)]" />
 
             <div className="relative">
-              <div className="rounded-full bg-white px-4 py-3 shadow-[0_16px_44px_rgba(75,138,255,0.18)] ring-1 ring-brand-100/80">
+              <div className="sticky top-3 z-20 rounded-full bg-white px-4 py-3 shadow-[0_16px_44px_rgba(75,138,255,0.18)] ring-1 ring-brand-100/80 backdrop-blur">
                 <div className="flex items-center justify-between gap-3">
                   <div className="flex min-w-0 items-center gap-3">
                     <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-brand-600 text-white shadow-[0_14px_28px_rgba(10,108,255,0.24)]">
@@ -1517,7 +1517,7 @@ export default function SouvenirHuntWebsite() {
 
               <AnimatePresence mode="wait">
                 <motion.div
-                  key={`${activeStep}-${activePlayTab}`}
+                  key={activeStep}
                   initial={{ opacity: 0, y: 18 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -12 }}
@@ -1548,23 +1548,32 @@ export default function SouvenirHuntWebsite() {
                     ))}
                   </div>
 
-                  <div className="mt-5 text-[1.08rem] leading-9 text-slate-950">
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={activePlayTab}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -8 }}
+                      transition={{ duration: 0.18 }}
+                      className="mt-5 text-[1rem] leading-8 text-slate-950"
+                    >
                     <div className="flex items-start gap-4">
                       <img
                         src={currentDetail.image}
                         alt={currentDetail.cardTitle}
                         className="h-[150px] w-[110px] shrink-0 rounded-2xl object-cover shadow-[0_12px_25px_rgba(15,23,42,0.12)]"
                       />
-                      <p className="font-serif text-[1.02rem] italic leading-9 text-slate-950">
+                      <p className="font-serif text-[0.98rem] italic leading-8 text-slate-950">
                         {activeTabContent.intro}
                       </p>
                     </div>
-                    <div className="mt-4 space-y-3 font-serif text-[1.02rem] italic leading-9 text-slate-950">
+                    <div className="mt-4 space-y-2.5 font-serif text-[0.98rem] italic leading-8 text-slate-950">
                       {activeTabContent.body.map((paragraph) => (
                         <p key={paragraph}>{paragraph}</p>
                       ))}
                     </div>
-                  </div>
+                    </motion.div>
+                  </AnimatePresence>
 
                   <div className="mt-6 rounded-[26px] bg-white/72 p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.7)] ring-1 ring-white/70">
                     <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-brand-600">
