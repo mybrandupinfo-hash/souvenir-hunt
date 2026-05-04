@@ -1403,20 +1403,20 @@ export default function SouvenirHuntWebsite() {
       <section
         className="px-3 py-6 sm:px-6 lg:px-8"
         style={{
-          backgroundColor: "#f5f7fb",
+          backgroundColor: "#ffffff",
           backgroundImage:
             "radial-gradient(circle, rgba(148,163,184,0.18) 1px, transparent 1px)",
           backgroundSize: "12px 12px",
         }}
       >
         <div className="mx-auto max-w-[390px]">
-          <div className="relative overflow-hidden rounded-[42px] bg-white px-4 pb-6 pt-6 shadow-[0_28px_90px_rgba(15,23,42,0.08)] ring-1 ring-slate-900/70 sm:px-5">
-            <div className="absolute inset-x-0 top-0 h-32 bg-[radial-gradient(circle_at_top,rgba(120,176,255,0.12),transparent_72%)]" />
+          <div className="relative overflow-hidden rounded-[42px] bg-white px-4 pb-6 pt-6 shadow-[0_24px_70px_rgba(15,23,42,0.08)] ring-1 ring-slate-900/75 sm:px-5">
+            <div className="absolute inset-x-0 top-0 h-28 bg-[radial-gradient(circle_at_top,rgba(120,176,255,0.08),transparent_72%)]" />
 
             <div className="relative">
               <div className="pt-4 text-center">
                 <div className="text-sm font-medium tracking-wide text-slate-500">Game ID: DVX78J3F</div>
-                <h1 className="mt-2 text-[2rem] font-extrabold leading-[1.02] tracking-[-0.05em] text-brand-600">
+                <h1 className="mt-2 text-[2.05rem] font-extrabold leading-[1.02] tracking-[-0.05em] text-[#0a51d8]">
                   The Emperors Secret
                 </h1>
               </div>
@@ -1425,15 +1425,15 @@ export default function SouvenirHuntWebsite() {
                 <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
                   Progress:
                 </div>
-                <div className="mt-2 h-4 overflow-hidden rounded-full border border-[#7458ff] bg-white shadow-[inset_0_1px_0_rgba(255,255,255,0.7)]">
+                <div className="mt-2 h-3.5 overflow-hidden rounded-full border border-slate-500 bg-white">
                   <div
-                    className="h-full rounded-full bg-gradient-to-r from-brand-600 via-[#5b4cff] to-[#a66dff] transition-all"
+                    className="h-full rounded-full bg-[#0a51d8] transition-all"
                     style={{ width: `${progress}%` }}
                   />
                 </div>
 
                 <div className="mt-4 overflow-x-auto pb-2">
-                  <div className="flex min-w-max gap-2">
+                  <div className="flex min-w-max gap-2 pr-3">
                     {demoSteps.map((step, index) => {
                       const unlocked = index <= unlockedStep;
                       const isActive = index === activeStep;
@@ -1442,11 +1442,11 @@ export default function SouvenirHuntWebsite() {
                           key={step.title}
                           disabled={!unlocked}
                           onClick={() => unlocked && setActiveStep(index)}
-                          className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
+                          className={`shrink-0 rounded-full px-4 py-1.5 text-sm font-semibold leading-none transition ${
                             isActive
-                              ? "bg-[#2417c8] text-white shadow-[0_10px_24px_rgba(36,23,200,0.26)]"
+                              ? "bg-[#2417c8] text-white"
                               : unlocked
-                              ? "bg-[#8eb4ff] text-white hover:bg-[#7ea8ff]"
+                              ? "bg-[#7fa5f4] text-white hover:bg-[#7299ef]"
                               : "bg-[#d8e4ff] text-white/80"
                           }`}
                         >
@@ -1457,7 +1457,7 @@ export default function SouvenirHuntWebsite() {
                   </div>
                 </div>
 
-                <div className="mt-1 h-[3px] rounded-full bg-slate-300" />
+                <div className="mt-1 h-1 rounded-full bg-slate-300" />
               </div>
 
               <AnimatePresence mode="wait">
@@ -1467,13 +1467,14 @@ export default function SouvenirHuntWebsite() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -12 }}
                   transition={{ duration: 0.25 }}
-                  className="mt-6 rounded-[32px] bg-[#b9d2ff] p-5 shadow-[0_20px_50px_rgba(92,145,255,0.18)]"
+                  className="mt-6 rounded-[32px] border border-[#8fa2ff] bg-[#f6f8ff] p-5 shadow-none"
                 >
-                  <h2 className="text-[2rem] font-extrabold leading-none tracking-[-0.05em] text-[#2317c7]">
+                  <h2 className="text-[1.95rem] font-extrabold leading-none tracking-[-0.05em] text-[#2747f5]">
                     {currentDetail.cardTitle}
                   </h2>
 
-                  <div className="mt-4 flex flex-wrap gap-2">
+                  <div className="mt-4 overflow-x-auto pb-1">
+                    <div className="flex min-w-max gap-2 pr-2">
                     {[
                       ["story", "Story"],
                       ["history", "History"],
@@ -1483,7 +1484,7 @@ export default function SouvenirHuntWebsite() {
                       <button
                         key={id}
                         onClick={() => setActivePlayTab(id)}
-                        className={`rounded-full px-4 py-1.5 text-sm font-semibold transition ${
+                        className={`shrink-0 rounded-full px-4 py-1.5 text-sm font-semibold leading-none transition ${
                           activePlayTab === id
                             ? "bg-[#2417c8] text-white"
                             : "bg-[#7ea4f2] text-white hover:bg-[#7097ea]"
@@ -1492,6 +1493,7 @@ export default function SouvenirHuntWebsite() {
                         {label}
                       </button>
                     ))}
+                    </div>
                   </div>
 
                   <AnimatePresence mode="wait">
@@ -1503,7 +1505,7 @@ export default function SouvenirHuntWebsite() {
                       transition={{ duration: 0.16 }}
                     >
                       {activePlayTab === "clue" ? (
-                        <div className="mt-5 rounded-[24px] bg-white/74 p-4 ring-1 ring-white/70">
+                        <div className="mt-5 rounded-[24px] bg-white p-4 ring-1 ring-[#d8defd]">
                           <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-brand-600">
                             Clue
                           </div>
@@ -1545,13 +1547,13 @@ export default function SouvenirHuntWebsite() {
                             <img
                               src={currentDetail.image}
                               alt={currentDetail.cardTitle}
-                              className="h-[150px] w-[110px] shrink-0 rounded-md object-cover shadow-[0_10px_22px_rgba(15,23,42,0.12)]"
+                              className="h-[150px] w-[110px] shrink-0 rounded-[2px] object-cover"
                             />
                             <p className="font-serif text-[0.98rem] italic leading-7 text-slate-950">
                               {activeTabContent.intro}
                             </p>
                           </div>
-                          <div className="mt-3 space-y-2 font-serif text-[0.98rem] italic leading-7 text-slate-950">
+                          <div className="mt-3 space-y-1.5 font-serif text-[0.98rem] italic leading-7 text-slate-950">
                             {activeTabContent.body.map((paragraph) => (
                               <p key={paragraph}>{paragraph}</p>
                             ))}
