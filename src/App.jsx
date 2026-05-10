@@ -807,7 +807,7 @@ export default function SouvenirHuntWebsite() {
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.55 }}
-            className="relative overflow-hidden rounded-[42px] bg-white/58 px-6 pb-8 pt-8 shadow-[0_28px_80px_rgba(15,23,42,0.06)] ring-1 ring-white/75 backdrop-blur-2xl sm:px-10 sm:pb-10 sm:pt-10 lg:px-14 lg:pb-14 lg:pt-14"
+            className="relative overflow-hidden rounded-[42px] bg-white/28 px-6 pb-8 pt-8 shadow-[0_28px_80px_rgba(15,23,42,0.05)] ring-1 ring-white/55 backdrop-blur-xl sm:px-10 sm:pb-10 sm:pt-10 lg:px-14 lg:pb-14 lg:pt-14"
           >
             <div className="absolute -left-12 top-0 h-44 w-44 rounded-full bg-brand-200/35 blur-3xl" />
             <div className="absolute right-0 top-12 h-56 w-56 rounded-full bg-sky-200/35 blur-3xl" />
@@ -982,7 +982,7 @@ export default function SouvenirHuntWebsite() {
       </motion.section>
 
       <motion.section ref={artistsRef} {...sectionFade} className="scroll-mt-28 px-4 py-24 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-6xl rounded-[42px] bg-[radial-gradient(circle_at_top_left,rgba(10,108,255,0.12),transparent_28%),linear-gradient(180deg,rgba(255,255,255,0.72),rgba(255,255,255,0.48))] p-8 shadow-[0_28px_80px_rgba(15,23,42,0.05)] ring-1 ring-white/75 backdrop-blur-2xl sm:p-10 lg:p-14">
+        <div className="mx-auto max-w-6xl rounded-[42px] bg-[radial-gradient(circle_at_top_left,rgba(10,108,255,0.10),transparent_28%),linear-gradient(180deg,rgba(255,255,255,0.34),rgba(255,255,255,0.18))] p-8 shadow-[0_28px_80px_rgba(15,23,42,0.04)] ring-1 ring-white/55 backdrop-blur-xl sm:p-10 lg:p-14">
           <div className="max-w-3xl">
             <div className="text-sm font-semibold uppercase tracking-[0.25em] text-brand-600">Artists & Makers</div>
             <h2 className="mt-4 text-3xl font-semibold tracking-[-0.04em] text-slate-950 sm:text-4xl lg:text-[3rem] lg:leading-[1.04]">
@@ -999,7 +999,7 @@ export default function SouvenirHuntWebsite() {
               [Search, "Puzzle Design", "Clues paced to feel polished, intuitive, and satisfying to solve."],
               [Sparkles, "Souvenir Craft", "A physical ending that feels local, memorable, and earned."],
             ].map(([Icon, title, text]) => (
-              <div key={title} className="rounded-[30px] bg-white/55 p-6 shadow-[0_18px_50px_rgba(15,23,42,0.04)] ring-1 ring-white/70 backdrop-blur">
+              <div key={title} className="rounded-[30px] bg-white/24 p-6 shadow-[0_18px_50px_rgba(15,23,42,0.03)] ring-1 ring-white/45 backdrop-blur-md">
                 <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-50 text-brand-600">
                   <Icon className="h-5 w-5" />
                 </div>
@@ -1024,7 +1024,7 @@ export default function SouvenirHuntWebsite() {
               <motion.div
                 key={review.name}
                 whileHover={{ y: -4 }}
-                className="rounded-[32px] bg-white/72 p-8 shadow-[0_20px_50px_rgba(15,23,42,0.05)] ring-1 ring-white/75 backdrop-blur-xl transition-shadow hover:shadow-[0_28px_60px_rgba(15,23,42,0.08)]"
+                className="rounded-[32px] bg-white/34 p-8 shadow-[0_20px_50px_rgba(15,23,42,0.04)] ring-1 ring-white/50 backdrop-blur-lg transition-shadow hover:shadow-[0_28px_60px_rgba(15,23,42,0.06)]"
               >
                 <div className="flex items-center gap-1 text-brand-600">
                   {Array.from({ length: 5 }).map((_, index) => (
