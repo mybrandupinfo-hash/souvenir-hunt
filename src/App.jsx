@@ -274,6 +274,32 @@ const playStepDetails = [
   },
 ];
 
+const PLAY_TABS = [
+  { id: "story", label: "Story" },
+  { id: "history", label: "History" },
+  { id: "clue", label: "Clue" },
+  { id: "guide", label: "Guide" },
+];
+
+const PLAY_TAB_INTRO = [
+  {
+    title: "Story",
+    text: "Story tells the narrative thread the game follows, so you understand the mood, stakes, and mystery behind each stop.",
+  },
+  {
+    title: "History",
+    text: "History shares the real background of the place you are standing in, so the hunt feels rooted in the actual city.",
+  },
+  {
+    title: "Clue",
+    text: "Clue is where you solve the riddle or enter the answer you discover on location. It tells you what to look for.",
+  },
+  {
+    title: "Guide",
+    text: "Guide helps you navigate between locations and gives you a clearer sense of where to go next.",
+  },
+];
+
 const FRONTEND_ROUTES = new Set([
   "/",
   "/hunts",
@@ -454,6 +480,9 @@ export default function SouvenirHuntWebsite() {
   const [openHint, setOpenHint] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activePlayTab, setActivePlayTab] = useState("story");
+  const [playIntroSeen, setPlayIntroSeen] = useLocalStorage("souvenir-hunt-play-intro-seen", false);
+  const [stepTabUnlocks, setStepTabUnlocks] = useLocalStorage("souvenir-hunt-step-tab-unlocks", {});
+  const [zoomedImage, setZoomedImage] = useState(null);
   const [clockTick, setClockTick] = useState(Date.now());
 
   useEffect(() => {
@@ -638,6 +667,8 @@ export default function SouvenirHuntWebsite() {
       setUnlockedStep(0);
       setActiveStep(0);
       setAnswers({});
+      setStepTabUnlocks({});
+      setPlayIntroSeen(false);
       setFeedback("");
       setOpenHint(null);
       setCheckoutLoading(false);
@@ -1375,42 +1406,115 @@ export default function SouvenirHuntWebsite() {
     const current = demoSteps[activeStep];
     const currentDetail = playStepDetails[activeStep] || playStepDetails[0];
     const progress = ((activeStep + 1) / demoSteps.length) * 100;
+    const currentUnlockedTabIndex = stepTabUnlocks[activeStep] ?? 0;
+    const activeTabIndex = PLAY_TABS.findIndex((tab) => tab.id === activePlayTab);
+    const nextTab = activeTabIndex >= 0 ? PLAY_TABS[activeTabIndex + 1] : null;
     const tabContent = {
       story: {
         intro: currentDetail.storyIntro,
         body: currentDetail.storyBody,
+        image: currentDetail.image,
       },
       history: {
         intro: currentDetail.history,
         body: [
           "Each location in the hunt is chosen because it reveals how politics, ritual, and architecture shaped the city over time.",
         ],
+        image: currentDetail.image,
       },
       clue: {
-        intro: "",
-        body: [],
+        intro:
+          "Read the location carefully, scan the nearby details, and enter the answer only once you are sure you have found the right symbol, word, or landmark.",
+        body: [
+          "The clue tab is the only interactive part of the step. Use it when you are ready to act on what the story and history have shown you.",
+        ],
+        image: currentDetail.image,
       },
       guide: {
         intro: currentDetail.guide,
         body: [
           "Slow down, scan the surroundings, and trust what feels deliberately placed. The hunt rewards careful observation more than speed.",
         ],
+        image: currentDetail.image,
       },
     };
     const activeTabContent = tabContent[activePlayTab];
+
+    const unlockNextTab = () => {
+      if (!nextTab) return;
+      setStepTabUnlocks((prev) => ({
+        ...prev,
+        [activeStep]: Math.max(prev[activeStep] ?? 0, activeTabIndex + 1),
+      }));
+      setActivePlayTab(nextTab.id);
+    };
+
+    if (!playIntroSeen) {
+      return (
+        <section
+          className="px-3 py-6 sm:px-6 lg:px-8"
+          style={{
+            backgroundColor: "#f8fafc",
+            backgroundImage:
+              "radial-gradient(circle, rgba(148,163,184,0.18) 1px, transparent 1px)",
+            backgroundSize: "12px 12px",
+          }}
+        >
+          <div className="mx-auto max-w-[390px]">
+            <div className="overflow-hidden rounded-[42px] border border-slate-900/80 bg-white px-5 pb-6 pt-7 shadow-[0_24px_70px_rgba(15,23,42,0.08)]">
+              <div className="text-center">
+                <div className="text-sm font-medium tracking-wide text-slate-500">Game ID: DVX78J3F</div>
+                <h1 className="mt-2 text-[2.05rem] font-extrabold leading-[1.02] tracking-[-0.05em] text-[#0a51d8]">
+                  The Emperors Secret
+                </h1>
+                <p className="mx-auto mt-4 max-w-[280px] text-sm leading-6 text-slate-500">
+                  Learn how each part of the hunt works before you start exploring the city.
+                </p>
+              </div>
+
+              <div className="mt-6 space-y-3">
+                {PLAY_TAB_INTRO.map((item, index) => (
+                  <div
+                    key={item.title}
+                    className="rounded-[24px] border border-[#d9e0ff] bg-[#f6f8ff] px-4 py-4"
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="text-sm font-bold uppercase tracking-[0.2em] text-[#2747f5]">
+                        {item.title}
+                      </div>
+                      <div className="flex h-7 w-7 items-center justify-center rounded-full bg-[#2747f5] text-xs font-semibold text-white">
+                        {index + 1}
+                      </div>
+                    </div>
+                    <p className="mt-3 text-sm leading-6 text-slate-700">{item.text}</p>
+                  </div>
+                ))}
+              </div>
+
+              <button
+                onClick={() => setPlayIntroSeen(true)}
+                className="mt-6 flex w-full items-center justify-center rounded-full bg-[#0a51d8] px-6 py-3.5 text-sm font-semibold text-white shadow-[0_18px_30px_rgba(10,81,216,0.2)] transition hover:bg-[#0948c0]"
+              >
+                Start Game
+              </button>
+            </div>
+          </div>
+        </section>
+      );
+    }
 
     return (
       <section
         className="px-3 py-6 sm:px-6 lg:px-8"
         style={{
-          backgroundColor: "#ffffff",
+          backgroundColor: "#f8fafc",
           backgroundImage:
             "radial-gradient(circle, rgba(148,163,184,0.18) 1px, transparent 1px)",
           backgroundSize: "12px 12px",
         }}
       >
         <div className="mx-auto max-w-[390px]">
-          <div className="relative overflow-hidden rounded-[42px] bg-white px-4 pb-6 pt-6 shadow-[0_24px_70px_rgba(15,23,42,0.08)] ring-1 ring-slate-900/75 sm:px-5">
+          <div className="relative overflow-hidden rounded-[42px] border border-slate-900/80 bg-white px-4 pb-6 pt-6 shadow-[0_24px_70px_rgba(15,23,42,0.08)] sm:px-5">
             <div className="absolute inset-x-0 top-0 h-28 bg-[radial-gradient(circle_at_top,rgba(120,176,255,0.08),transparent_72%)]" />
 
             <div className="relative">
@@ -1442,7 +1546,7 @@ export default function SouvenirHuntWebsite() {
                           key={step.title}
                           disabled={!unlocked}
                           onClick={() => unlocked && setActiveStep(index)}
-                          className={`shrink-0 rounded-full px-4 py-1.5 text-sm font-semibold leading-none transition ${
+                          className={`shrink-0 rounded-full px-4 py-1.5 text-[0.82rem] font-semibold leading-none transition ${
                             isActive
                               ? "bg-[#2417c8] text-white"
                               : unlocked
@@ -1473,27 +1577,27 @@ export default function SouvenirHuntWebsite() {
                     {currentDetail.cardTitle}
                   </h2>
 
-                  <div className="mt-4 overflow-x-auto pb-1">
-                    <div className="flex min-w-max gap-2 pr-2">
-                    {[
-                      ["story", "Story"],
-                      ["history", "History"],
-                      ["clue", "Clue"],
-                      ["guide", "Guide"],
-                    ].map(([id, label]) => (
+                  <div className="mt-4 grid grid-cols-4 gap-2">
+                    {PLAY_TABS.map(({ id, label }) => {
+                      const tabIndex = PLAY_TABS.findIndex((tab) => tab.id === id);
+                      const isUnlocked = tabIndex <= currentUnlockedTabIndex;
+                      return (
                       <button
                         key={id}
-                        onClick={() => setActivePlayTab(id)}
-                        className={`shrink-0 rounded-full px-4 py-1.5 text-sm font-semibold leading-none transition ${
+                        onClick={() => isUnlocked && setActivePlayTab(id)}
+                        disabled={!isUnlocked}
+                        className={`rounded-full px-0 py-1.5 text-[0.82rem] font-semibold leading-none transition ${
                           activePlayTab === id
                             ? "bg-[#2417c8] text-white"
-                            : "bg-[#7ea4f2] text-white hover:bg-[#7097ea]"
+                            : isUnlocked
+                            ? "bg-[#7ea4f2] text-white hover:bg-[#7097ea]"
+                            : "bg-[#dfe7ff] text-[#87a0de]"
                         }`}
                       >
                         {label}
                       </button>
-                    ))}
-                    </div>
+                    );
+                    })}
                   </div>
 
                   <AnimatePresence mode="wait">
@@ -1506,10 +1610,27 @@ export default function SouvenirHuntWebsite() {
                     >
                       {activePlayTab === "clue" ? (
                         <div className="mt-5 rounded-[24px] bg-white p-4 ring-1 ring-[#d8defd]">
-                          <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-brand-600">
-                            Clue
+                          <div className="flex items-start gap-4">
+                            <button
+                              onClick={() => setZoomedImage({ src: currentDetail.image, alt: currentDetail.cardTitle })}
+                              className="shrink-0 overflow-hidden rounded-[12px] focus:outline-none focus:ring-2 focus:ring-[#2747f5]/30"
+                            >
+                              <img
+                                src={currentDetail.image}
+                                alt={currentDetail.cardTitle}
+                                className="h-[132px] w-[102px] object-cover transition hover:scale-[1.02]"
+                              />
+                            </button>
+                            <div className="min-w-0">
+                              <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-brand-600">
+                                Clue
+                              </div>
+                              <p className="mt-2 text-[0.98rem] italic leading-7 text-slate-900">
+                                {activeTabContent.intro}
+                              </p>
+                            </div>
                           </div>
-                          <p className="mt-3 text-base leading-7 text-slate-800">{current.clue}</p>
+                          <p className="mt-4 text-base leading-7 text-slate-800">{current.clue}</p>
                           <input
                             value={answers[activeStep] || ""}
                             onChange={(event) => setAnswers({ ...answers, [activeStep]: event.target.value })}
@@ -1532,6 +1653,17 @@ export default function SouvenirHuntWebsite() {
                               <Sparkles className="h-4 w-4" />
                             </button>
                           </div>
+                          <div className="mt-4 flex justify-end">
+                            {nextTab ? (
+                              <button
+                                onClick={unlockNextTab}
+                                className="inline-flex items-center gap-2 rounded-full bg-[#2417c8] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#1b11af]"
+                              >
+                                Next
+                                <ArrowRight className="h-4 w-4" />
+                              </button>
+                            ) : null}
+                          </div>
                           {openHint === activeStep ? (
                             <div className="mt-4 rounded-[22px] bg-brand-50 p-4 text-sm leading-6 text-brand-800">
                               {current.hint}
@@ -1544,11 +1676,16 @@ export default function SouvenirHuntWebsite() {
                       ) : (
                         <div className="mt-5 text-[1rem] leading-7 text-slate-950">
                           <div className="flex items-start gap-4">
-                            <img
-                              src={currentDetail.image}
-                              alt={currentDetail.cardTitle}
-                              className="h-[150px] w-[110px] shrink-0 rounded-[2px] object-cover"
-                            />
+                            <button
+                              onClick={() => setZoomedImage({ src: activeTabContent.image, alt: currentDetail.cardTitle })}
+                              className="shrink-0 overflow-hidden rounded-[8px] focus:outline-none focus:ring-2 focus:ring-[#2747f5]/30"
+                            >
+                              <img
+                                src={activeTabContent.image}
+                                alt={currentDetail.cardTitle}
+                                className="h-[150px] w-[110px] object-cover transition hover:scale-[1.02]"
+                              />
+                            </button>
                             <p className="font-serif text-[0.98rem] italic leading-7 text-slate-950">
                               {activeTabContent.intro}
                             </p>
@@ -1557,6 +1694,17 @@ export default function SouvenirHuntWebsite() {
                             {activeTabContent.body.map((paragraph) => (
                               <p key={paragraph}>{paragraph}</p>
                             ))}
+                          </div>
+                          <div className="mt-5 flex justify-end">
+                            {nextTab ? (
+                              <button
+                                onClick={unlockNextTab}
+                                className="inline-flex items-center gap-2 rounded-full bg-[#2417c8] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#1b11af]"
+                              >
+                                Next
+                                <ArrowRight className="h-4 w-4" />
+                              </button>
+                            ) : null}
                           </div>
                         </div>
                       )}
@@ -1709,6 +1857,36 @@ export default function SouvenirHuntWebsite() {
         {page === "play" && renderPlay()}
         {page === "contact" && renderContact()}
       </main>
+
+      <AnimatePresence>
+        {zoomedImage ? (
+          <motion.button
+            type="button"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setZoomedImage(null)}
+            className="fixed inset-0 z-[80] flex items-center justify-center bg-slate-950/78 px-4 backdrop-blur-sm"
+          >
+            <motion.div
+              initial={{ scale: 0.94, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.97, opacity: 0 }}
+              transition={{ duration: 0.18 }}
+              className="relative max-w-[92vw]"
+            >
+              <img
+                src={zoomedImage.src}
+                alt={zoomedImage.alt}
+                className="max-h-[82vh] rounded-[28px] border border-white/20 bg-white object-contain shadow-[0_30px_90px_rgba(15,23,42,0.45)]"
+              />
+              <div className="mt-3 text-center text-sm font-medium text-white/80">
+                Tap anywhere to close
+              </div>
+            </motion.div>
+          </motion.button>
+        ) : null}
+      </AnimatePresence>
 
       <footer className="border-t border-brand-100 bg-white/70 px-4 py-12 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-7xl">
