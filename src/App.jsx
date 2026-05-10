@@ -347,6 +347,10 @@ function getApiBaseUrl() {
   return getRedeemBaseUrl();
 }
 
+function getHomeParallaxBackground() {
+  return "/home-parallax-bg.svg";
+}
+
 function useLocalStorage(key, initialValue) {
   const [value, setValue] = useState(() => {
     if (typeof window === "undefined") return initialValue;
@@ -610,8 +614,13 @@ export default function SouvenirHuntWebsite() {
   }, [isPurchaseExpired, purchase, setPurchase]);
 
   useEffect(() => {
-    setActivePlayTab("story");
-  }, [activeStep]);
+    const unlockedIndex = stepTabUnlocks[activeStep] ?? 0;
+    const currentIndex = PLAY_TABS.findIndex((tab) => tab.id === activePlayTab);
+
+    if (currentIndex === -1 || currentIndex > unlockedIndex) {
+      setActivePlayTab(PLAY_TABS[unlockedIndex]?.id || "story");
+    }
+  }, [activePlayTab, activeStep, stepTabUnlocks]);
 
   useEffect(() => {
     let cancelled = false;
@@ -1408,6 +1417,7 @@ export default function SouvenirHuntWebsite() {
     const progress = ((activeStep + 1) / demoSteps.length) * 100;
     const currentUnlockedTabIndex = stepTabUnlocks[activeStep] ?? 0;
     const activeTabIndex = PLAY_TABS.findIndex((tab) => tab.id === activePlayTab);
+    const previousTab = activeTabIndex > 0 ? PLAY_TABS[activeTabIndex - 1] : null;
     const nextTab = activeTabIndex >= 0 ? PLAY_TABS[activeTabIndex + 1] : null;
     const tabContent = {
       story: {
@@ -1449,19 +1459,25 @@ export default function SouvenirHuntWebsite() {
       setActivePlayTab(nextTab.id);
     };
 
+    const goToPreviousTab = () => {
+      if (!previousTab) return;
+      setActivePlayTab(previousTab.id);
+    };
+
     if (!playIntroSeen) {
       return (
         <section
           className="px-3 py-6 sm:px-6 lg:px-8"
           style={{
-            backgroundColor: "#f8fafc",
+            backgroundColor: "#f5f7fb",
             backgroundImage:
-              "radial-gradient(circle, rgba(148,163,184,0.18) 1px, transparent 1px)",
+              "radial-gradient(circle, rgba(148,163,184,0.14) 1px, transparent 1px)",
             backgroundSize: "12px 12px",
           }}
         >
           <div className="mx-auto max-w-[390px]">
-            <div className="overflow-hidden rounded-[42px] border border-slate-900/80 bg-white px-5 pb-6 pt-7 shadow-[0_24px_70px_rgba(15,23,42,0.08)]">
+            <div className="overflow-hidden rounded-[42px] border border-slate-900/80 bg-[linear-gradient(180deg,#ffffff_0%,#fbfdff_100%)] px-5 pb-6 pt-7 shadow-[0_28px_80px_rgba(15,23,42,0.08)]">
+              <div className="absolute inset-x-0 top-0 h-24 bg-[radial-gradient(circle_at_top,rgba(72,122,255,0.10),transparent_72%)]" />
               <div className="text-center">
                 <div className="text-sm font-medium tracking-wide text-slate-500">Game ID: DVX78J3F</div>
                 <h1 className="mt-2 text-[2.05rem] font-extrabold leading-[1.02] tracking-[-0.05em] text-[#0a51d8]">
@@ -1476,7 +1492,7 @@ export default function SouvenirHuntWebsite() {
                 {PLAY_TAB_INTRO.map((item, index) => (
                   <div
                     key={item.title}
-                    className="rounded-[24px] border border-[#d9e0ff] bg-[#f6f8ff] px-4 py-4"
+                    className="rounded-[24px] border border-white/80 bg-[linear-gradient(180deg,#f6f8ff_0%,#eef3ff_100%)] px-4 py-4 shadow-[0_14px_35px_rgba(92,127,255,0.08)]"
                   >
                     <div className="flex items-center justify-between">
                       <div className="text-sm font-bold uppercase tracking-[0.2em] text-[#2747f5]">
@@ -1493,7 +1509,7 @@ export default function SouvenirHuntWebsite() {
 
               <button
                 onClick={() => setPlayIntroSeen(true)}
-                className="mt-6 flex w-full items-center justify-center rounded-full bg-[#0a51d8] px-6 py-3.5 text-sm font-semibold text-white shadow-[0_18px_30px_rgba(10,81,216,0.2)] transition hover:bg-[#0948c0]"
+                className="mt-6 flex w-full items-center justify-center rounded-full bg-[linear-gradient(180deg,#1f63ff_0%,#0a51d8_100%)] px-6 py-3.5 text-sm font-semibold text-white shadow-[0_20px_36px_rgba(10,81,216,0.24)] transition hover:brightness-105"
               >
                 Start Game
               </button>
@@ -1507,15 +1523,16 @@ export default function SouvenirHuntWebsite() {
       <section
         className="px-3 py-6 sm:px-6 lg:px-8"
         style={{
-          backgroundColor: "#f8fafc",
+          backgroundColor: "#f5f7fb",
           backgroundImage:
-            "radial-gradient(circle, rgba(148,163,184,0.18) 1px, transparent 1px)",
+            "radial-gradient(circle, rgba(148,163,184,0.14) 1px, transparent 1px)",
           backgroundSize: "12px 12px",
         }}
       >
         <div className="mx-auto max-w-[390px]">
-          <div className="relative overflow-hidden rounded-[42px] border border-slate-900/80 bg-white px-4 pb-6 pt-6 shadow-[0_24px_70px_rgba(15,23,42,0.08)] sm:px-5">
-            <div className="absolute inset-x-0 top-0 h-28 bg-[radial-gradient(circle_at_top,rgba(120,176,255,0.08),transparent_72%)]" />
+          <div className="relative overflow-hidden rounded-[42px] border border-slate-900/80 bg-[linear-gradient(180deg,#ffffff_0%,#fbfdff_100%)] px-4 pb-6 pt-6 shadow-[0_28px_80px_rgba(15,23,42,0.08)] sm:px-5">
+            <div className="absolute inset-x-0 top-0 h-32 bg-[radial-gradient(circle_at_top,rgba(72,122,255,0.12),transparent_72%)]" />
+            <div className="absolute -right-10 top-24 h-28 w-28 rounded-full bg-[#dfe8ff]/60 blur-3xl" />
 
             <div className="relative">
               <div className="pt-4 text-center">
@@ -1529,9 +1546,9 @@ export default function SouvenirHuntWebsite() {
                 <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">
                   Progress:
                 </div>
-                <div className="mt-2 h-3.5 overflow-hidden rounded-full border border-slate-500 bg-white">
+                <div className="mt-2 h-3.5 overflow-hidden rounded-full border border-slate-300 bg-white shadow-[inset_0_1px_1px_rgba(15,23,42,0.08)]">
                   <div
-                    className="h-full rounded-full bg-[#0a51d8] transition-all"
+                    className="h-full rounded-full bg-[linear-gradient(90deg,#2518ca_0%,#0a51d8_100%)] transition-all"
                     style={{ width: `${progress}%` }}
                   />
                 </div>
@@ -1571,7 +1588,7 @@ export default function SouvenirHuntWebsite() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -12 }}
                   transition={{ duration: 0.25 }}
-                  className="mt-6 rounded-[32px] border border-[#8fa2ff] bg-[#f6f8ff] p-5 shadow-none"
+                  className="mt-6 rounded-[32px] border border-[#b8c8ff] bg-[linear-gradient(180deg,#f7f9ff_0%,#edf3ff_100%)] p-5 shadow-[0_18px_45px_rgba(97,125,255,0.08)]"
                 >
                   <h2 className="text-[1.95rem] font-extrabold leading-none tracking-[-0.05em] text-[#2747f5]">
                     {currentDetail.cardTitle}
@@ -1588,10 +1605,10 @@ export default function SouvenirHuntWebsite() {
                         disabled={!isUnlocked}
                         className={`rounded-full px-0 py-1.5 text-[0.82rem] font-semibold leading-none transition ${
                           activePlayTab === id
-                            ? "bg-[#2417c8] text-white"
+                            ? "bg-[linear-gradient(180deg,#3023db_0%,#2417c8_100%)] text-white shadow-[0_10px_20px_rgba(36,23,200,0.22)]"
                             : isUnlocked
-                            ? "bg-[#7ea4f2] text-white hover:bg-[#7097ea]"
-                            : "bg-[#dfe7ff] text-[#87a0de]"
+                            ? "bg-[#86a9f5] text-white hover:bg-[#789df1]"
+                            : "bg-[#e5ecff] text-[#8ea5dd]"
                         }`}
                       >
                         {label}
@@ -1609,7 +1626,7 @@ export default function SouvenirHuntWebsite() {
                       transition={{ duration: 0.16 }}
                     >
                       {activePlayTab === "clue" ? (
-                        <div className="mt-5 rounded-[24px] bg-white p-4 ring-1 ring-[#d8defd]">
+                        <div className="mt-5 rounded-[24px] bg-white/95 p-4 shadow-[0_14px_35px_rgba(76,110,210,0.08)] ring-1 ring-[#d8defd]">
                           <div className="flex items-start gap-4">
                             <button
                               onClick={() => setZoomedImage({ src: currentDetail.image, alt: currentDetail.cardTitle })}
@@ -1653,11 +1670,22 @@ export default function SouvenirHuntWebsite() {
                               <Sparkles className="h-4 w-4" />
                             </button>
                           </div>
-                          <div className="mt-4 flex justify-end">
+                          <div className="mt-4 flex items-center justify-between gap-3">
+                            {previousTab ? (
+                              <button
+                                onClick={goToPreviousTab}
+                                className="inline-flex items-center gap-2 rounded-full border border-[#d7defb] bg-[#f8faff] px-4 py-2.5 text-sm font-semibold text-[#2747f5] transition hover:bg-white"
+                              >
+                                <ChevronRight className="h-4 w-4 rotate-180" />
+                                Previous
+                              </button>
+                            ) : (
+                              <div />
+                            )}
                             {nextTab ? (
                               <button
                                 onClick={unlockNextTab}
-                                className="inline-flex items-center gap-2 rounded-full bg-[#2417c8] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#1b11af]"
+                                className="inline-flex items-center gap-2 rounded-full bg-[linear-gradient(180deg,#3023db_0%,#2417c8_100%)] px-4 py-2.5 text-sm font-semibold text-white shadow-[0_10px_20px_rgba(36,23,200,0.22)] transition hover:brightness-105"
                               >
                                 Next
                                 <ArrowRight className="h-4 w-4" />
@@ -1695,11 +1723,22 @@ export default function SouvenirHuntWebsite() {
                               <p key={paragraph}>{paragraph}</p>
                             ))}
                           </div>
-                          <div className="mt-5 flex justify-end">
+                          <div className="mt-5 flex items-center justify-between gap-3">
+                            {previousTab ? (
+                              <button
+                                onClick={goToPreviousTab}
+                                className="inline-flex items-center gap-2 rounded-full border border-[#d7defb] bg-white/70 px-4 py-2.5 text-sm font-semibold text-[#2747f5] transition hover:bg-white"
+                              >
+                                <ChevronRight className="h-4 w-4 rotate-180" />
+                                Previous
+                              </button>
+                            ) : (
+                              <div />
+                            )}
                             {nextTab ? (
                               <button
                                 onClick={unlockNextTab}
-                                className="inline-flex items-center gap-2 rounded-full bg-[#2417c8] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#1b11af]"
+                                className="inline-flex items-center gap-2 rounded-full bg-[linear-gradient(180deg,#3023db_0%,#2417c8_100%)] px-4 py-2.5 text-sm font-semibold text-white shadow-[0_10px_20px_rgba(36,23,200,0.22)] transition hover:brightness-105"
                               >
                                 Next
                                 <ArrowRight className="h-4 w-4" />
@@ -1747,6 +1786,29 @@ export default function SouvenirHuntWebsite() {
 
   return (
     <div className="min-h-screen bg-transparent text-slate-900">
+      {page === "home" ? (
+        <div
+          aria-hidden="true"
+          className="pointer-events-none fixed inset-0 z-0"
+          style={{
+            backgroundColor: "#f8fbff",
+            backgroundImage: `url(${getHomeParallaxBackground()})`,
+            backgroundPosition: "center top",
+            backgroundRepeat: "no-repeat",
+            backgroundSize: "cover",
+            opacity: 0.34,
+          }}
+        />
+      ) : null}
+
+      {page === "home" ? (
+        <div
+          aria-hidden="true"
+          className="pointer-events-none fixed inset-0 z-0 bg-[radial-gradient(circle_at_18%_12%,rgba(38,86,255,0.10),transparent_18%),radial-gradient(circle_at_82%_16%,rgba(118,188,255,0.11),transparent_22%),linear-gradient(180deg,rgba(248,251,255,0.42),rgba(255,255,255,0.16)_24%,rgba(255,255,255,0.5)_100%)]"
+        />
+      ) : null}
+
+      <div className="relative z-10">
       <header className="sticky top-0 z-50 py-4">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between rounded-full border border-brand-100 bg-white px-4 py-3 shadow-sm sm:px-6">
@@ -1937,6 +1999,7 @@ export default function SouvenirHuntWebsite() {
           </div>
         </div>
       </footer>
+      </div>
     </div>
   );
 }
