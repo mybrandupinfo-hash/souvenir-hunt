@@ -807,7 +807,7 @@ export default function SouvenirHuntWebsite() {
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.55 }}
-            className="relative overflow-hidden rounded-[42px] bg-white/28 px-6 pb-8 pt-8 shadow-[0_28px_80px_rgba(15,23,42,0.05)] ring-1 ring-white/55 backdrop-blur-xl sm:px-10 sm:pb-10 sm:pt-10 lg:px-14 lg:pb-14 lg:pt-14"
+            className="relative overflow-hidden rounded-[42px] px-6 pb-8 pt-8 sm:px-10 sm:pb-10 sm:pt-10 lg:px-14 lg:pb-14 lg:pt-14"
           >
             <div className="absolute -left-12 top-0 h-44 w-44 rounded-full bg-brand-200/35 blur-3xl" />
             <div className="absolute right-0 top-12 h-56 w-56 rounded-full bg-sky-200/35 blur-3xl" />
@@ -815,7 +815,7 @@ export default function SouvenirHuntWebsite() {
 
             <div className="relative mx-auto max-w-5xl">
               <div className="max-w-3xl">
-                <div className="inline-flex items-center gap-2 rounded-full bg-white/80 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-brand-600 shadow-[0_10px_30px_rgba(10,108,255,0.08)] ring-1 ring-brand-100/70">
+                <div className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-brand-600">
                   <Sparkles className="h-3.5 w-3.5" />
                   Made by local artists
                 </div>
@@ -842,7 +842,7 @@ export default function SouvenirHuntWebsite() {
                   </button>
                   <button
                     onClick={() => navigate("your-hunt")}
-                    className="inline-flex items-center justify-center gap-2 rounded-full bg-white/82 px-7 py-3.5 text-sm font-semibold text-brand-700 shadow-[0_14px_35px_rgba(15,23,42,0.06)] ring-1 ring-brand-100/80 transition hover:-translate-y-0.5 hover:bg-white"
+                    className="inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5 text-sm font-semibold text-brand-700 transition hover:-translate-y-0.5"
                   >
                     Continue Your Hunt
                     <Play className="h-4 w-4" />
@@ -854,7 +854,7 @@ export default function SouvenirHuntWebsite() {
                 initial={{ opacity: 0, scale: 0.98, y: 14 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.12 }}
-                className="mt-10 overflow-hidden rounded-[34px] bg-gradient-to-br from-[#a9ccff] via-[#dcecff] to-[#f7fbff] p-4 shadow-[0_24px_60px_rgba(110,167,255,0.22)] ring-1 ring-white/70 sm:p-6"
+                className="mt-10 overflow-hidden rounded-[34px] p-4 sm:p-6"
               >
                 <svg
                   viewBox="0 0 360 240"
