@@ -351,6 +351,22 @@ function getHomeParallaxBackground() {
   return "/home-parallax-bg.svg";
 }
 
+function getStartLocationMapsUrl(hunt) {
+  const query = encodeURIComponent(
+    `${hunt.startLocation}, ${hunt.location}`,
+  );
+
+  if (typeof window !== "undefined") {
+    const ua = window.navigator.userAgent || "";
+    const isAppleDevice = /iPhone|iPad|iPod|Macintosh/i.test(ua);
+    if (isAppleDevice) {
+      return `https://maps.apple.com/?q=${query}`;
+    }
+  }
+
+  return `https://www.google.com/maps/search/?api=1&query=${query}`;
+}
+
 function useLocalStorage(key, initialValue) {
   const [value, setValue] = useState(() => {
     if (typeof window === "undefined") return initialValue;
@@ -484,6 +500,7 @@ export default function SouvenirHuntWebsite() {
   const [openHint, setOpenHint] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activePlayTab, setActivePlayTab] = useState("story");
+  const [playStartSeen, setPlayStartSeen] = useLocalStorage("souvenir-hunt-play-start-seen", false);
   const [playIntroSeen, setPlayIntroSeen] = useLocalStorage("souvenir-hunt-play-intro-seen", false);
   const [stepTabUnlocks, setStepTabUnlocks] = useLocalStorage("souvenir-hunt-step-tab-unlocks", {});
   const [zoomedImage, setZoomedImage] = useState(null);
@@ -677,6 +694,7 @@ export default function SouvenirHuntWebsite() {
       setActiveStep(0);
       setAnswers({});
       setStepTabUnlocks({});
+      setPlayStartSeen(false);
       setPlayIntroSeen(false);
       setFeedback("");
       setOpenHint(null);
@@ -1415,6 +1433,7 @@ export default function SouvenirHuntWebsite() {
     const current = demoSteps[activeStep];
     const currentDetail = playStepDetails[activeStep] || playStepDetails[0];
     const progress = ((activeStep + 1) / demoSteps.length) * 100;
+    const startLocationUrl = getStartLocationMapsUrl(selectedHunt);
     const currentUnlockedTabIndex = stepTabUnlocks[activeStep] ?? 0;
     const activeTabIndex = PLAY_TABS.findIndex((tab) => tab.id === activePlayTab);
     const previousTab = activeTabIndex > 0 ? PLAY_TABS[activeTabIndex - 1] : null;
@@ -1463,6 +1482,69 @@ export default function SouvenirHuntWebsite() {
       if (!previousTab) return;
       setActivePlayTab(previousTab.id);
     };
+
+    if (!playStartSeen) {
+      return (
+        <section
+          className="px-3 py-6 sm:px-6 lg:px-8"
+          style={{
+            backgroundColor: "#f5f7fb",
+            backgroundImage:
+              "radial-gradient(circle, rgba(148,163,184,0.14) 1px, transparent 1px)",
+            backgroundSize: "12px 12px",
+          }}
+        >
+          <div className="mx-auto max-w-[390px]">
+            <div className="overflow-hidden rounded-[42px] border border-slate-900/80 bg-[linear-gradient(180deg,#ffffff_0%,#fbfdff_100%)] px-5 pb-6 pt-7 shadow-[0_28px_80px_rgba(15,23,42,0.08)]">
+              <div className="text-center">
+                <div className="text-sm font-medium tracking-wide text-slate-500">Before You Start</div>
+                <h1 className="mt-2 text-[2rem] font-extrabold leading-[1.02] tracking-[-0.05em] text-[#0a51d8]">
+                  Go to the Start Location
+                </h1>
+                <p className="mx-auto mt-4 max-w-[290px] text-sm leading-6 text-slate-600">
+                  Head to the starting point first. Once you are there, begin the run and follow the story on location.
+                </p>
+              </div>
+
+              <div className="mt-6 rounded-[28px] border border-[#dbe5ff] bg-[linear-gradient(180deg,#f9fbff_0%,#eef4ff_100%)] p-5 shadow-[0_18px_42px_rgba(98,129,255,0.08)]">
+                <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#4c6de0]">
+                  Start Point
+                </div>
+                <div className="mt-2 text-lg font-semibold tracking-tight text-slate-950">
+                  {selectedHunt.startLocation}
+                </div>
+                <div className="mt-2 text-sm leading-6 text-slate-500">
+                  {selectedHunt.location}
+                </div>
+                <div className="mt-5 flex items-start gap-3 rounded-[22px] bg-white/70 p-4 ring-1 ring-white/80">
+                  <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-[#2747f5]" />
+                  <p className="text-sm leading-6 text-slate-600">
+                    Open the location in Maps, walk to the start point, and once you are there begin the run.
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-6 space-y-3">
+                <a
+                  href={startLocationUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex w-full items-center justify-center rounded-full bg-[linear-gradient(180deg,#1f63ff_0%,#0a51d8_100%)] px-6 py-3.5 text-sm font-semibold text-white shadow-[0_20px_36px_rgba(10,81,216,0.24)] transition hover:brightness-105"
+                >
+                  Get to Start Point
+                </a>
+                <button
+                  onClick={() => setPlayStartSeen(true)}
+                  className="flex w-full items-center justify-center rounded-full border border-[#d8e2ff] bg-white/78 px-6 py-3.5 text-sm font-semibold text-[#2747f5] transition hover:bg-white"
+                >
+                  Once you are on the location, start the run
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+      );
+    }
 
     if (!playIntroSeen) {
       return (
