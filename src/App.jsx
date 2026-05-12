@@ -1495,31 +1495,43 @@ export default function SouvenirHuntWebsite() {
           }}
         >
           <div className="mx-auto max-w-[390px]">
-            <div className="overflow-hidden rounded-[42px] border border-slate-900/80 bg-[linear-gradient(180deg,#ffffff_0%,#fbfdff_100%)] px-5 pb-6 pt-7 shadow-[0_28px_80px_rgba(15,23,42,0.08)]">
-              <div className="text-center">
-                <div className="text-sm font-medium tracking-wide text-slate-500">Before You Start</div>
+            <div className="relative overflow-hidden rounded-[42px] border border-slate-900/80 bg-[linear-gradient(180deg,#ffffff_0%,#fbfdff_72%,#f6faff_100%)] px-5 pb-6 pt-7 shadow-[0_28px_80px_rgba(15,23,42,0.08)]">
+              <div className="absolute inset-x-0 top-0 h-28 bg-[radial-gradient(circle_at_top,rgba(72,122,255,0.12),transparent_74%)]" />
+              <div className="absolute -right-8 top-16 h-24 w-24 rounded-full bg-[#dce8ff]/80 blur-3xl" />
+
+              <div className="relative text-center">
+                <div className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#5f75c9]">
+                  Before You Start
+                </div>
                 <h1 className="mt-2 text-[2rem] font-extrabold leading-[1.02] tracking-[-0.05em] text-[#0a51d8]">
                   Go to the Start Location
                 </h1>
-                <p className="mx-auto mt-4 max-w-[290px] text-sm leading-6 text-slate-600">
+                <p className="mx-auto mt-4 max-w-[290px] text-sm leading-6 text-slate-500">
                   Head to the starting point first. Once you are there, begin the run and follow the story on location.
                 </p>
               </div>
 
-              <div className="mt-6 rounded-[28px] border border-[#dbe5ff] bg-[linear-gradient(180deg,#f9fbff_0%,#eef4ff_100%)] p-5 shadow-[0_18px_42px_rgba(98,129,255,0.08)]">
-                <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#4c6de0]">
-                  Start Point
+              <div className="relative mt-6 rounded-[30px] border border-white/80 bg-[linear-gradient(180deg,rgba(246,249,255,0.98)_0%,rgba(235,243,255,0.9)_100%)] p-5 shadow-[0_18px_42px_rgba(98,129,255,0.08)] ring-1 ring-[#dbe5ff] backdrop-blur-sm">
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#4c6de0]">
+                      Start Point
+                    </div>
+                    <div className="mt-2 text-lg font-semibold tracking-tight text-slate-950">
+                      {selectedHunt.startLocation}
+                    </div>
+                    <div className="mt-2 text-sm leading-6 text-slate-500">
+                      {selectedHunt.location}
+                    </div>
+                  </div>
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-white/88 text-[#2747f5] shadow-[0_10px_24px_rgba(39,71,245,0.10)] ring-1 ring-white/90">
+                    <MapPin className="h-4 w-4" />
+                  </div>
                 </div>
-                <div className="mt-2 text-lg font-semibold tracking-tight text-slate-950">
-                  {selectedHunt.startLocation}
-                </div>
-                <div className="mt-2 text-sm leading-6 text-slate-500">
-                  {selectedHunt.location}
-                </div>
-                <div className="mt-5 flex items-start gap-3 rounded-[22px] bg-white/70 p-4 ring-1 ring-white/80">
-                  <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-[#2747f5]" />
+
+                <div className="mt-5 rounded-[24px] bg-white/72 px-4 py-4 ring-1 ring-white/85">
                   <p className="text-sm leading-6 text-slate-600">
-                    Open the location in Maps, walk to the start point, and once you are there begin the run.
+                    Open the location in Maps, walk to the start point, and when you arrive begin the run from there.
                   </p>
                 </div>
               </div>
@@ -1535,9 +1547,9 @@ export default function SouvenirHuntWebsite() {
                 </a>
                 <button
                   onClick={() => setPlayStartSeen(true)}
-                  className="flex w-full items-center justify-center rounded-full border border-[#d8e2ff] bg-white/78 px-6 py-3.5 text-sm font-semibold text-[#2747f5] transition hover:bg-white"
+                  className="flex w-full items-center justify-center rounded-full border border-[#d8e2ff] bg-white/82 px-6 py-3.5 text-sm font-semibold text-[#2747f5] shadow-[0_10px_24px_rgba(15,23,42,0.05)] transition hover:bg-white"
                 >
-                  Once you are on the location, start the run
+                  I&apos;m on Start location
                 </button>
               </div>
             </div>
